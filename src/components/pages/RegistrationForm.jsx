@@ -412,35 +412,36 @@ export default function RegistrationForm() {
                                 )}
 
                                 {/* Verification Code */}
-                                <div className="space-y-2 border-2">
+                                <div className="space-y-2 ">
                                     <Label htmlFor="verificationCode">Enter OTP</Label>
-                                    <InputOTP
-                                        id="verificationCode"
-                                        className={"flex items-center"}
-                                        maxLength={6}
-                                        value={registrationFormData.verificationCode ?? ''}
-                                        onChange={(val) => {
-                                            setRegistrationFormData((prev) => ({
-                                                ...prev,
-                                                verificationCode: val,
-                                            }))
-                                            delete formError.verificationCode;
-                                        }}
-                                    >
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={0} />
-                                            <InputOTPSlot index={1} />
-                                            <InputOTPSlot index={2} />
-                                        </InputOTPGroup>
-                                        <InputOTPSeparator />
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={3} />
-                                            <InputOTPSlot index={4} />
-                                            <InputOTPSlot index={5} />
-                                        </InputOTPGroup>
-                                    </InputOTP>
+                                    <div className='max-w-64 mx-auto'>
+                                        <InputOTP
+                                            id="verificationCode"
+                                            maxLength={6}
+                                            value={registrationFormData.verificationCode ?? ''}
+                                            onChange={(val) => {
+                                                setRegistrationFormData((prev) => ({
+                                                    ...prev,
+                                                    verificationCode: val,
+                                                }))
+                                                delete formError.verificationCode;
+                                            }}
+                                        >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                            </InputOTPGroup>
+                                            <InputOTPSeparator />
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                                <InputOTPSlot index={5} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
+                                    </div>
                                     {formError.verificationCode && (
-                                        <p className="text-sm text-red-500">{formError.verificationCode}</p>
+                                        <p className="text-sm text-red-500 top-full">{formError.verificationCode}</p>
                                     )}
                                 </div>
                             </CardContent>
@@ -466,7 +467,7 @@ export default function RegistrationForm() {
                                         disabled={isSubmitting}
                                         className="p-0 h-auto"
                                     >
-                                        Resend code
+                                        Resend OTP
                                     </Button>
                                     <Button
                                         variant="link"

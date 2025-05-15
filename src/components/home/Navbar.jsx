@@ -141,9 +141,9 @@ export default function Navbar() {
             <div className="flex-shrink-0 flex items-center">
               <a href="/" className="flex items-center">
                 <div className="h-8 w-8 rounded-md bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center mr-2">
-                  <span className="text-white font-bold text-xl">C</span>
+                  <span className="text-white font-bold text-xl">Z</span>
                 </div>
-                <span className="text-white font-bold text-xl">CareerHub</span>
+                <span className="text-white font-bold text-xl">Zidio Connect</span>
               </a>
             </div>
             
@@ -209,19 +209,7 @@ export default function Navbar() {
               <Search className="h-5 w-5" />
             </button>
             
-            {/* Role Selector - for demo purposes */}
-            <div className="hidden md:block">
-              <select 
-                value={userRole}
-                onChange={(e) => setUserRole(e.target.value)}
-                className="bg-gray-800 text-sm text-gray-300 rounded-md py-1 px-2 border border-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              >
-                <option value="student">Student</option>
-                <option value="recruiter">Recruiter</option>
-                <option value="teacher">Teacher</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
+
             
             {/* Notifications */}
             <button className="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
