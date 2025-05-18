@@ -48,7 +48,8 @@ export default function RegistrationForm() {
 
     // Form states
     const [registrationFormData, setRegistrationFormData] = new useState({
-        fullName: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -77,7 +78,7 @@ export default function RegistrationForm() {
     // Get data from Form Inputs.
     function handleChange(e) {
         const { name, value } = e.target;
-        setRegistrationFormData((prevState) => ({ ...prevState, [name]: value }));
+        setRegistrationFormData((prevState) => ({ ...prevState, [name]: value.trim() }));
         setFormError((prevState) => ({ ...prevState, [name]: "" }))
     }
 
@@ -92,6 +93,8 @@ export default function RegistrationForm() {
             verificationCode: ""
         })
     }
+
+    console.log(registrationFormData)
 
     function validateRegistrationForm(formData) {
         let validForm = true;
@@ -134,13 +137,22 @@ export default function RegistrationForm() {
     // Validation error messages
     const validationConfig = {
         // Error Messages for first name.
-        fullName: [
+        firstName: [
             // First Error Message.
-            { pattern: /^[A-Za-z ]+$/, errorMessage: "Name can contain only space and letters" },
+            { pattern: /^[A-Za-z]+$/, errorMessage: "First name can contains only letters" },
             // Second Error Message.
-            { minLength: 3, errorMessage: "Name is too short, please enter at least 3 characters." },
+            { minLength: 3, errorMessage: "First name is too short, please enter at least 3 characters." },
             // Third Error Message.
-            { required: true, errorMessage: "Please fill in your Name." },
+            { required: true, errorMessage: "Please fill in your first name." },
+        ],
+        // Error Messages for last name.
+        lastName: [
+            // First Error Message.
+            { pattern: /^[A-Za-z]+$/, errorMessage: "Last name can contains only letters" },
+            // Second Error Message.
+            { minLength: 3, errorMessage: "Last name is too short, please enter at least 3 characters." },
+            // Third Error Message.
+            { required: true, errorMessage: "Please fill in your last name." },
         ],
         // Error Messages for email.
         email: [
@@ -260,25 +272,50 @@ export default function RegistrationForm() {
                             </CardHeader>
                             <CardContent className="space-y-4">
                                 {/* Full Name */}
-                                <div className="space-y-2">
-                                    <Label htmlFor="fullName">Full Name</Label>
-                                    <div className="relative">
-                                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                            <User className="h-4 w-4 text-gray-500" />
+                                <div className='flex gap-4'>
+                                    {/* First name */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="firstName">First Name</Label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                <User className="h-4 w-4 text-gray-500" />
+                                            </div>
+                                            <Input
+                                                id="firstName"
+                                                name="firstName"
+                                                type="text"
+                                                placeholder="Enter here"
+                                                value={registrationFormData.firstName}
+                                                onChange={(e) => handleChange(e)}
+                                                className={`pl-10 ${formError.firstName ? 'border-red-500' : ''}`}
+                                            />
                                         </div>
-                                        <Input
-                                            id="fullName"
-                                            name="fullName"
-                                            type="text"
-                                            placeholder="Enter here"
-                                            value={registrationFormData.fullName}
-                                            onChange={(e) => handleChange(e)}
-                                            className={`pl-10 ${formError.fullName ? 'border-red-500' : ''}`}
-                                        />
+                                        {formError.firstName && (
+                                            <p className="text-sm text-red-500">{formError.firstName}</p>
+                                        )}
                                     </div>
-                                    {formError.fullName && (
-                                        <p className="text-sm text-red-500">{formError.fullName}</p>
-                                    )}
+
+                                    {/* Last name */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="lastName">Last Name</Label>
+                                        <div className="relative">
+                                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                                <User className="h-4 w-4 text-gray-500" />
+                                            </div>
+                                            <Input
+                                                id="lastName"
+                                                name="lastName"
+                                                type="text"
+                                                placeholder="Enter here"
+                                                value={registrationFormData.lastName}
+                                                onChange={(e) => handleChange(e)}
+                                                className={`pl-10 ${formError.lastName ? 'border-red-500' : ''}`}
+                                            />
+                                        </div>
+                                        {formError.lastName && (
+                                            <p className="text-sm text-red-500">{formError.lastName}</p>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {/* Email */}
@@ -412,35 +449,36 @@ export default function RegistrationForm() {
                                 )}
 
                                 {/* Verification Code */}
-                                <div className="space-y-2 border-2">
+                                <div className="space-y-2 ">
                                     <Label htmlFor="verificationCode">Enter OTP</Label>
-                                    <InputOTP
-                                        id="verificationCode"
-                                        className={"flex items-center"}
-                                        maxLength={6}
-                                        value={registrationFormData.verificationCode ?? ''}
-                                        onChange={(val) => {
-                                            setRegistrationFormData((prev) => ({
-                                                ...prev,
-                                                verificationCode: val,
-                                            }))
-                                            delete formError.verificationCode;
-                                        }}
-                                    >
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={0} />
-                                            <InputOTPSlot index={1} />
-                                            <InputOTPSlot index={2} />
-                                        </InputOTPGroup>
-                                        <InputOTPSeparator />
-                                        <InputOTPGroup>
-                                            <InputOTPSlot index={3} />
-                                            <InputOTPSlot index={4} />
-                                            <InputOTPSlot index={5} />
-                                        </InputOTPGroup>
-                                    </InputOTP>
+                                    <div className='max-w-64 mx-auto'>
+                                        <InputOTP
+                                            id="verificationCode"
+                                            maxLength={6}
+                                            value={registrationFormData.verificationCode ?? ''}
+                                            onChange={(val) => {
+                                                setRegistrationFormData((prev) => ({
+                                                    ...prev,
+                                                    verificationCode: val,
+                                                }))
+                                                delete formError.verificationCode;
+                                            }}
+                                        >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                            </InputOTPGroup>
+                                            <InputOTPSeparator />
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                                <InputOTPSlot index={5} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
+                                    </div>
                                     {formError.verificationCode && (
-                                        <p className="text-sm text-red-500">{formError.verificationCode}</p>
+                                        <p className="text-sm text-red-500 top-full">{formError.verificationCode}</p>
                                     )}
                                 </div>
                             </CardContent>
@@ -466,7 +504,7 @@ export default function RegistrationForm() {
                                         disabled={isSubmitting}
                                         className="p-0 h-auto"
                                     >
-                                        Resend code
+                                        Resend OTP
                                     </Button>
                                     <Button
                                         variant="link"
