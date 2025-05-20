@@ -8,12 +8,12 @@ function App() {
 
   return (
     <>
-      <main className='w-full h-full inset-0 bg-gradient-to-br from-gray-900 to-gray-800 opacity-90'>
+{/*       <main className='w-full h-full inset-0 bg-gradient-to-br from-gray-900 to-gray-800 opacity-90'>
         <Navbar />
         <Home />
         <Services />
         <RegistrationForm />
-      </main>
+      </main> */}
     </>
   )
 }
