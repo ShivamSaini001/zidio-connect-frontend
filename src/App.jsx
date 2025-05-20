@@ -16,12 +16,13 @@ import EnrollmentForm from './components/pages/EnrollmentForm'
 import HackathonParticipantForm from './components/pages/HackathonParticipantForm'
 import BookmarkForm from './components/pages/BookmarkForm'
 import RecruiterDashboard from './components/dashboard/recruiter/RecruiterDashboard'
+import Services from './components/pages/Services'
 
 function App() {
 
   return (
     <>
-      <main class="inset-0 bg-gradient-to-br from-gray-900 to-gray-800">
+      <main className='w-full h-full inset-0 bg-gradient-to-br from-gray-900 to-gray-800 opacity-90'>
       <Navbar />
       <Home />
       <RegistrationForm />

@@ -40,11 +40,11 @@ export default function home() {
   };
 
   return (
-    <div className="bg-gray-50">
+    <div className="">
       {/* Hero section with dynamic content based on selected role */}
       <div className="relative overflow-hidden">
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 opacity-90"></div>
+        <div className="absolute"></div>
         
         {/* Content container */}
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
