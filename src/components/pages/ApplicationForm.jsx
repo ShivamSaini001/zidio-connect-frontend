@@ -12,8 +12,8 @@ export default function ApplicationForm() {
           <h2 className="text-2xl font-semibold mb-6">Submit Application</h2>
           <form className="space-y-4">
             <div>
-              <Label htmlFor="jobId">Job ID</Label>
-              <Input id="jobId" name="jobId" placeholder="Enter Job ID" />
+              <Label htmlFor="jobId2">Job ID</Label>
+              <Input id="jobId2" name="jobId" placeholder="Enter Job ID" />
             </div>
             <div>
               <Label htmlFor="applicationId">Application ID</Label>
@@ -36,8 +36,8 @@ export default function ApplicationForm() {
               </Select>
             </div>
             <div>
-              <Label htmlFor="studentId">Student ID</Label>
-              <Input id="studentId" name="studentId" placeholder="Enter Student ID" />
+              <Label htmlFor="studentId2">Student ID</Label>
+              <Input id="studentId2" name="studentId" placeholder="Enter Student ID" />
             </div>
             <Button type="submit" className="w-full mt-4">Submit</Button>
           </form>

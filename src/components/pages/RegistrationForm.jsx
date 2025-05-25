@@ -44,7 +44,7 @@ import {
 
 
 
-export default function RegistrationForm() {
+export default function RegistrationForm({title = 'Create your account', description = 'Sign up to get started with our platform'}) {
 
     // Form states
     const [registrationFormData, setRegistrationFormData] = new useState({
@@ -236,10 +236,10 @@ export default function RegistrationForm() {
             <div className="w-full max-w-md space-y-8">
                 <div className="text-center">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900">
-                        Create your account
+                        {title}
                     </h2>
                     <p className="mt-2 text-sm text-gray-600">
-                        Sign up to get started with our platform
+                        {description}
                     </p>
                 </div>
 

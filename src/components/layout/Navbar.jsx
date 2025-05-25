@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Menu, X, Search, Bell, ChevronDown, User } from 'lucide-react';
+import { ThemeSwitch } from '../context/ThemeSwitch';
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,8 +12,8 @@ export default function Navbar() {
 
   // Primary Navigation
   const mainNavLinks = [
-    { 
-      name: 'Opportunities', 
+    {
+      name: 'Opportunities',
       href: '/opportunities',
       dropdown: [
         { name: 'Jobs', href: '/jobs', badge: 'New' },
@@ -21,8 +23,8 @@ export default function Navbar() {
         { name: 'Browse by Role', href: '/roles' },
       ]
     },
-    { 
-      name: 'Hackathons', 
+    {
+      name: 'Hackathons',
       href: '/hackathons',
       dropdown: [
         { name: 'Upcoming Events', href: '/hackathons/upcoming' },
@@ -31,8 +33,8 @@ export default function Navbar() {
         { name: 'Sponsorship', href: '/hackathons/sponsor' },
       ]
     },
-    { 
-      name: 'Courses', 
+    {
+      name: 'Courses',
       href: '/courses',
       dropdown: [
         { name: 'Tech & Programming', href: '/courses/tech' },
@@ -69,7 +71,7 @@ export default function Navbar() {
 
   // For demo - in real implementation this would come from auth context
   const [userRole, setUserRole] = useState('student');
-  
+
   // Handle navbar background change on scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -90,7 +92,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        dropdownRef.current && 
+        dropdownRef.current &&
         !dropdownRef.current.contains(event.target) &&
         !event.target.closest('[data-dropdown-trigger]')
       ) {
@@ -128,11 +130,10 @@ export default function Navbar() {
   };
 
   return (
-    <nav 
+    <nav
       ref={navRef}
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled || isOpen ? 'bg-gray-900 shadow-lg' : 'bg-transparent'
-      }`}
+      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled || isOpen ? 'bg-gray-900 shadow-lg' : 'bg-transparent'
+        }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
@@ -146,7 +147,7 @@ export default function Navbar() {
                 <span className="text-white font-bold text-xl">Zidio Connect</span>
               </a>
             </div>
-            
+
             {/* Desktop Main Navigation */}
             <div className="hidden md:ml-8 md:flex md:items-center md:space-x-1">
               {mainNavLinks.map((link, index) => (
@@ -154,27 +155,26 @@ export default function Navbar() {
                   <button
                     data-dropdown-trigger="true"
                     onClick={() => toggleDropdown(index)}
-                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center ${
-                      activeDropdown === index 
-                        ? 'bg-gray-800 text-white' 
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                    }`}
+                    className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center ${activeDropdown === index
+                      ? 'bg-gray-800 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                      }`}
                   >
                     {link.name}
                     {link.dropdown && (
                       <ChevronDown className="ml-1 h-4 w-4" />
                     )}
                   </button>
-                  
+
                   {/* Dropdown menus */}
                   {link.dropdown && activeDropdown === index && (
-                    <div 
+                    <div
                       ref={dropdownRef}
                       className="absolute left-0 mt-2 w-60 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 divide-y divide-gray-700"
                     >
                       <div className="py-1" role="menu" aria-orientation="vertical">
                         {link.dropdown.map((item, idx) => (
-                          <a 
+                          <a
                             key={idx}
                             href={item.href}
                             className="group flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white"
@@ -183,11 +183,10 @@ export default function Navbar() {
                             <span className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-300"></span>
                             <span className="flex-grow">{item.name}</span>
                             {item.badge && (
-                              <span className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                                item.badge === 'New' ? 'bg-blue-500 text-blue-100' :
+                              <span className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${item.badge === 'New' ? 'bg-blue-500 text-blue-100' :
                                 item.badge === 'Popular' ? 'bg-green-500 text-green-100' :
-                                'bg-purple-500 text-purple-100'
-                              }`}>
+                                  'bg-purple-500 text-purple-100'
+                                }`}>
                                 {item.badge}
                               </span>
                             )}
@@ -200,7 +199,7 @@ export default function Navbar() {
               ))}
             </div>
           </div>
-          
+
           {/* Right side navigation - Search, Notifications, User Menu */}
           <div className="flex items-center space-x-2 md:space-x-4">
             {/* Search */}
@@ -208,16 +207,21 @@ export default function Navbar() {
               <span className="sr-only">Search</span>
               <Search className="h-5 w-5" />
             </button>
-            
 
-            
             {/* Notifications */}
             <button className="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
               <span className="sr-only">View notifications</span>
               <Bell className="h-5 w-5" />
               <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-gray-800"></span>
             </button>
-            
+
+            {/* Theme switch */}
+            <button className="bg-gray-800 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
+              <span className='h-6 w-6'>
+                <ThemeSwitch />
+              </span>
+            </button>
+
             {/* User menu */}
             <div className="relative ml-3">
               <div>
@@ -232,7 +236,7 @@ export default function Navbar() {
                   </div>
                 </button>
               </div>
-              
+
               {/* User dropdown menu */}
               {activeDropdown === 'profile' && (
                 <div
@@ -250,11 +254,10 @@ export default function Navbar() {
                       <a
                         key={index}
                         href={item.href}
-                        className={`block px-4 py-2 text-sm ${
-                          item.highlight 
-                            ? 'text-blue-400 hover:bg-gray-700' 
-                            : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                        }`}
+                        className={`block px-4 py-2 text-sm ${item.highlight
+                          ? 'text-blue-400 hover:bg-gray-700'
+                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                          }`}
                       >
                         {item.name}
                       </a>
@@ -271,7 +274,7 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          
+
             {/* Mobile menu button */}
             <div className="flex md:hidden">
               <button
@@ -305,7 +308,7 @@ export default function Navbar() {
                   <ChevronDown className={`h-4 w-4 transition-transform ${activeDropdown === `mobile-${index}` ? 'transform rotate-180' : ''}`} />
                 )}
               </button>
-              
+
               {link.dropdown && activeDropdown === `mobile-${index}` && (
                 <div className="pl-4 mt-1 mb-2 space-y-1 border-l-2 border-gray-700">
                   {link.dropdown.map((item, subIndex) => (
@@ -316,11 +319,10 @@ export default function Navbar() {
                     >
                       {item.name}
                       {item.badge && (
-                        <span className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                          item.badge === 'New' ? 'bg-blue-500 text-blue-100' :
+                        <span className={`ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${item.badge === 'New' ? 'bg-blue-500 text-blue-100' :
                           item.badge === 'Popular' ? 'bg-green-500 text-green-100' :
-                          'bg-purple-500 text-purple-100'
-                        }`}>
+                            'bg-purple-500 text-purple-100'
+                          }`}>
                           {item.badge}
                         </span>
                       )}
@@ -331,14 +333,14 @@ export default function Navbar() {
             </div>
           ))}
         </div>
-        
+
         {/* Mobile role selection */}
         <div className="px-4 py-3 border-t border-gray-700">
           <div className="flex items-center">
             <label htmlFor="mobile-role-select" className="block text-sm font-medium text-gray-300 mr-2">
               Role:
             </label>
-            <select 
+            <select
               id="mobile-role-select"
               value={userRole}
               onChange={(e) => setUserRole(e.target.value)}
@@ -351,7 +353,7 @@ export default function Navbar() {
             </select>
           </div>
         </div>
-        
+
         {/* Mobile user-specific links */}
         <div className="pt-4 pb-3 border-t border-gray-700">
           <div className="flex items-center px-5">
@@ -370,11 +372,10 @@ export default function Navbar() {
               <a
                 key={index}
                 href={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${
-                  item.highlight 
-                    ? 'text-blue-400 hover:bg-gray-700' 
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                }`}
+                className={`block px-3 py-2 rounded-md text-base font-medium ${item.highlight
+                  ? 'text-blue-400 hover:bg-gray-700'
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                  }`}
               >
                 {item.name}
               </a>

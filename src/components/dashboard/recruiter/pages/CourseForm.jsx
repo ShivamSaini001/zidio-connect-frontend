@@ -12,8 +12,8 @@ export default function CourseForm() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="courseId" className="mb-2 block">Course ID</Label>
-          <Input id="courseId" placeholder="Enter Course ID" />
+          <Label htmlFor="courseId1" className="mb-2 block">Course ID</Label>
+          <Input id="courseId1" placeholder="Enter Course ID" />
         </div>
 
         <div>
