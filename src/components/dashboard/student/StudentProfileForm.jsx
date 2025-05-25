@@ -17,8 +17,8 @@ export default function StudentProfileForm() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="studentId" className="mb-2 block">Student ID</Label>
-          <Input id="studentId" placeholder="Enter Student ID" />
+          <Label htmlFor="studentId1" className="mb-2 block">Student ID</Label>
+          <Input id="studentId1" placeholder="Enter Student ID" />
         </div>
 
         <div>

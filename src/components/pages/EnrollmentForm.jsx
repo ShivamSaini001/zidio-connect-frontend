@@ -20,8 +20,8 @@ export default function EnrollmentForm() {
           <Input id="studentId" placeholder="Enter Student ID" />
         </div>
         <div>
-          <Label htmlFor="courseId">Course ID</Label>
-          <Input id="courseId" placeholder="Enter Course ID" />
+          <Label htmlFor="courseId2">Course ID</Label>
+          <Input id="courseId2" placeholder="Enter Course ID" />
         </div>
         <div>
           <Label htmlFor="status">Status</Label>

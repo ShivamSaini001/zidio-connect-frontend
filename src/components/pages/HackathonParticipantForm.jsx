@@ -15,12 +15,12 @@ export default function HackathonParticipantForm() {
           <Input id="participantId" placeholder="Enter Participant ID" />
         </div>
         <div>
-          <Label htmlFor="hackathonId">Hackathon ID</Label>
-          <Input id="hackathonId" placeholder="Enter Hackathon ID" />
+          <Label htmlFor="hackathonId1">Hackathon ID</Label>
+          <Input id="hackathonId1" placeholder="Enter Hackathon ID" />
         </div>
         <div>
-          <Label htmlFor="studentId">Student ID</Label>
-          <Input id="studentId" placeholder="Enter Student ID" />
+          <Label htmlFor="studentId3">Student ID</Label>
+          <Input id="studentId3" placeholder="Enter Student ID" />
         </div>
         <div>
           <Label htmlFor="teamName">Team Name</Label>

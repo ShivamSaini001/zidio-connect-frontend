@@ -15,12 +15,12 @@ export default function BookmarkForm() {
           <Input id="bookmarkId" placeholder="Enter Bookmark ID" />
         </div>
         <div>
-          <Label htmlFor="jobId">Job ID</Label>
-          <Input id="jobId" placeholder="Enter Job ID to bookmark" />
+          <Label htmlFor="jobId1">Job ID</Label>
+          <Input id="jobId1" placeholder="Enter Job ID to bookmark" />
         </div>
         <div>
-          <Label htmlFor="studentId">Student ID</Label>
-          <Input id="studentId" placeholder="Enter your Student ID" />
+          <Label htmlFor="studentId4">Student ID</Label>
+          <Input id="studentId4" placeholder="Enter your Student ID" />
         </div>
         <Button className="w-full mt-4">Bookmark Job</Button>
       </CardContent>

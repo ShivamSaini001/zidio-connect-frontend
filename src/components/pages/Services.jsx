@@ -56,10 +56,7 @@ const Services = () => {
 
 
     return (
-        <div
-            className="mb-24"
-            
-        >
+        <div className="mb-24">
             <h2 className="text-3xl font-bold text-center mb-12 text-white">Our Services</h2>
             <div className="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 {services.map((service, index) => {

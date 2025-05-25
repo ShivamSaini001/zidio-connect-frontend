@@ -12,8 +12,8 @@ export default function TeacherProfileForm() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div>
-          <Label htmlFor="teacherId">Teacher ID</Label>
-          <Input id="teacherId" placeholder="Enter Teacher ID" />
+          <Label htmlFor="teacherId1">Teacher ID</Label>
+          <Input id="teacherId1" placeholder="Enter Teacher ID" />
         </div>
         <div>
           <Label htmlFor="mobile4">Mobile</Label>
