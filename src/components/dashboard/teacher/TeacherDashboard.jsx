@@ -1,10 +1,12 @@
 import React from 'react'
+import { Outlet } from 'react-router'
+import Layout from './layout/Layout'
 
 const TeacherDashboard = () => {
   return (
-    <div className='text-7xl text-green-500 font-bold'>
-      Teacher Dashboard
-    </div>
+    <Layout>
+      <Outlet />
+    </Layout>
   )
 }
 

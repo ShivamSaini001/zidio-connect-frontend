@@ -41,10 +41,12 @@ import {
     TabsList,
     TabsTrigger
 } from '@/components/ui/tabs';
+import { Link } from 'react-router';
+import { Checkbox } from '../ui/checkbox';
 
 
 
-export default function RegistrationForm({title = 'Create your account', description = 'Sign up to get started with our platform'}) {
+export default function RegistrationForm({ title = 'Create your account', description = 'Sign up to get started with our platform' }) {
 
     // Form states
     const [registrationFormData, setRegistrationFormData] = new useState({
@@ -56,8 +58,6 @@ export default function RegistrationForm({title = 'Create your account', descrip
         selectedRole: "",
         verificationCode: ""
     });
-
-    console.log(registrationFormData);
 
     const [formError, setFormError] = useState({});
     const [acceptTermsAndConditions, setAcceptTermsAndConditions] = useState(false);
@@ -179,9 +179,12 @@ export default function RegistrationForm({title = 'Create your account', descrip
 
     // Handle form submission
     const handleSubmit = () => {
-        if (!validateRegistrationForm(registrationFormData) || !registrationFormData.selectedRole) {
+        if (!validateRegistrationForm(registrationFormData) || !registrationFormData.selectedRole || !acceptTermsAndConditions) {
             if (!registrationFormData.selectedRole) {
                 setFormError((prevState) => ({ ...prevState, selectedRole: "Please select your role!!" }))
+            }
+            if (!acceptTermsAndConditions) {
+                setFormError((prevState) => ({ ...prevState, terms: "Please accept our terms and conditions." }))
             }
             return;
         }
@@ -409,8 +412,36 @@ export default function RegistrationForm({title = 'Create your account', descrip
                                         <p className="text-sm text-red-500">{formError.selectedRole}</p>
                                     )}
                                 </div>
+
+                                {/* Terms and Condtions */}
+                                <div className="space-y-2">
+                                    <div className="flex flex-col items-start gap-3">
+                                        <div className="flex items-start gap-3">
+                                            <Checkbox id="terms"
+                                                checked={acceptTermsAndConditions}
+                                                onClick={(e) => {
+                                                    setAcceptTermsAndConditions(!acceptTermsAndConditions);
+                                                    delete formError.terms;
+                                                }}
+                                                className={formError.terms ? 'border-red-500' : ''}
+                                            />
+                                            <div className="grid gap-2">
+                                                <Label htmlFor="terms">Accept terms and conditions</Label>
+                                                <p className="text-muted-foreground text-sm">
+                                                    By clicking this checkbox, you agree to the terms and conditions.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        {
+                                            formError.terms && (
+                                                <p className="text-sm text-red-500">{formError.terms}</p>
+                                            )
+                                        }
+                                    </div>
+
+                                </div>
                             </CardContent>
-                            <CardFooter>
+                            <CardFooter className={'flex flex-col gap-5'}>
                                 <Button
                                     className="w-full"
                                     onClick={handleSubmit}
@@ -425,6 +456,12 @@ export default function RegistrationForm({title = 'Create your account', descrip
                                         "Register"
                                     )}
                                 </Button>
+                                <p>
+                                    Already have an account? &nbsp;
+                                    <Link to={"/sign-in"} className="text-blue-500 underline">
+                                        Login
+                                    </Link>
+                                </p>
                             </CardFooter>
                         </Card>
                     </TabsContent>

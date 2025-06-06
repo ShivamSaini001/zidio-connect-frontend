@@ -1,10 +1,9 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router'
+import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App';
 import Home from './components/pages/Home'
 import { AdminApp } from './components/dashboard/admin/AdminApp';
-import StudentDashboard from './components/dashboard/student/StudentDashboard';
 import RecruiterDashboard from './components/dashboard/recruiter/pages/RecruiterDashboard';
 import TeacherDashboard from './components/dashboard/teacher/TeacherDashboard';
 import AdminDashboard from './components/dashboard/admin/pages/AdminDashboard';
@@ -21,7 +20,24 @@ import NotFoundError from './components/pages/errors/NotFoundError';
 import MaintenanceError from './components/pages/errors/MaintenanceError';
 import GeneralError from './components/pages/errors/GeneralError';
 import RecruiterApp from './components/dashboard/recruiter/RecruiterApp';
-import StudentHome from './components/dashboard/student/StudentHome';
+import JobDetailsPage from './components/dashboard/student/pages/JobDetailsPage';
+import CourseDetailsPage from './components/dashboard/student/pages/CourseDetailsPage';
+import InternshipDetailsPage from './components/dashboard/student/pages/InternshipDetailsPage';
+import StudentProfilePage from './components/dashboard/student/pages/StudentProfilePage';
+
+// Add these imports for teacher dashboard pages
+import TeacherDashboardHome from './components/dashboard/teacher/pages/TeacherDashboardHome';
+import CourseManagement from './components/dashboard/teacher/pages/CourseManagement';
+import QuizManagement from './components/dashboard/teacher/pages/QuizManagement';
+import StudentManagement from './components/dashboard/teacher/pages/StudentManagement';
+import AnalyticsDashboard from './components/dashboard/teacher/pages/AnalyticsDashboard';
+import NotificationsPage from './components/dashboard/teacher/pages/NotificationsPage';
+import TeacherEarnings from './components/dashboard/teacher/pages/TeacherEarnings';
+import CourseForm from './components/dashboard/recruiter/pages/CourseForm';
+import AssignmentManagement from './components/dashboard/teacher/pages/AssignmentManagement';
+import TeacherProfileForm from './components/dashboard/teacher/TeacherProfileForm';
+import StudentHomePage from './components/dashboard/student/pages/home/StudentHomePage';
+import HackathoneDetailsPage from './components/dashboard/student/pages/HackathoneDetailsPage';
 
 const router = createBrowserRouter([
   {
@@ -37,10 +53,6 @@ const router = createBrowserRouter([
   {
     path: "/sign-in",
     element: <LoginPage />,
-  },
-  {
-    path: "/student-home",
-    element: <StudentHome />,
   },
   {
     path: "/sign-up",
@@ -110,15 +122,108 @@ const router = createBrowserRouter([
       },
     ]
   },
+  // Update the teacher dashboard route to include children routes
   {
-    path: "/dashboard/student",
-    element: <StudentDashboard />,
-  },
-  {
-    path: "/dashboard/teacher",
+    path: "/teacher",
     element: <TeacherDashboard />,
+    children: [
+      {
+        path: "/teacher/dashboard", // Default route
+        element: <TeacherDashboardHome />,
+      },
+      {
+        path: "/teacher/courses",
+        element: <CourseManagement />,
+      },
+      {
+        path: "/teacher/courses/create",
+        element: <CourseForm />,
+      },
+      {
+        path: "/teacher/courses/:id",
+        element: <CourseForm />,
+      },
+      {
+        path: "/teacher/courses/:id/edit",
+        element: <CourseForm />,
+      },
+      {
+        path: "/teacher/assignments",
+        element: <AssignmentManagement />,
+      },
+      {
+        path: "/teacher/assignments/create",
+        element: <AssignmentManagement />,
+      },
+      {
+        path: "/teacher/quizzes",
+        element: <QuizManagement />,
+      },
+      {
+        path: "/teacher/students",
+        element: <StudentManagement />,
+      },
+      {
+        path: "/teacher/forums",
+        element: <div>Discussion Forums</div>,
+      },
+      {
+        path: "/teacher/analytics/courses",
+        element: <AnalyticsDashboard type="courses" />,
+      },
+      {
+        path: "/teacher/analytics/students",
+        element: <AnalyticsDashboard type="students" />,
+      },
+      {
+        path: "/teacher/reports",
+        element: <div>Reports</div>,
+      },
+      {
+        path: "/teacher/notifications",
+        element: <NotificationsPage />,
+      },
+      {
+        path: "/teacher/profile",
+        element: <TeacherProfileForm />,
+      },
+      {
+        path: "/teacher/earnings",
+        element: <TeacherEarnings />,
+      },
+    ],
+  },
+  // Student routing
+  {
+    path: "/student",
+    element: "",
+    children: [
+      {
+        path: "/student/home",
+        element: <StudentHomePage />,
+      },
+      {
+        path: "/student/profile",
+        element: <StudentProfilePage />,
+      },
+      {
+        path: "/student/job-details",
+        element: <JobDetailsPage />,
+      },
+      {
+        path: "/student/cource-details",
+        element: <CourseDetailsPage />,
+      },
+      {
+        path: "/student/internship-details",
+        element: <InternshipDetailsPage />,
+      },
+      {
+        path: "/student/hackathon-details",
+        element: <HackathoneDetailsPage />,
+      }
+    ]
   }
-
 ]);
 
 createRoot(document.getElementById('root')).render(
