@@ -27,7 +27,7 @@ const Layout = () => {
                     'has-[main.fixed-main]:group-data-[scroll-locked=1]/body:h-svh'
                 )}>
                 {/* Header */}
-                <Header className={'shadow-md mb-4'}>
+                <Header className={'shadow-md'}>
                     <div>
                         <p className='font-bold text-xl'>Recruiter Dashboard</p>
                     </div>

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Outlet } from 'react-router'
 import Layout from './layout/Layout'
+import { Outlet } from 'react-router'
 
-const TeacherDashboard = () => {
+const TeacherApp = () => {
   return (
     <Layout>
       <Outlet />
@@ -10,4 +10,4 @@ const TeacherDashboard = () => {
   )
 }
 
-export default TeacherDashboard
+export default TeacherApp

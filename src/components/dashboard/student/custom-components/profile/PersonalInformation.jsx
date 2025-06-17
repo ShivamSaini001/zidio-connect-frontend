@@ -178,12 +178,6 @@ const PersonalInformation = ({ profile, setProfile, className, setShowToast, set
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                            {errors.gender && (
-                                <Alert variant="destructive" className="mt-2 py-2">
-                                    <AlertCircle className="h-4 w-4" />
-                                    <AlertDescription>{errors.gender}</AlertDescription>
-                                </Alert>
-                            )}
                         </div>
 
                         {/* LinkedIn url */}

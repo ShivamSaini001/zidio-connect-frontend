@@ -1,8 +1,23 @@
-import { Briefcase, Camera, Code, Palette, Play, Star, Users } from 'lucide-react'
-import React from 'react'
+import { Bookmark, BookmarkCheck, Briefcase, Camera, Code, Palette, Play, Star, Users } from 'lucide-react'
+import React, { useState } from 'react'
 import { Link } from 'react-router'
 
-const CourseCard = ({course}) => {
+const CourseCard = ({ course }) => {
+
+    const [bookmarkedCourses, setBookmarkedCourses] = useState(new Set());
+
+    const toggleBookmark = (courseId) => {
+        setBookmarkedCourses(prev => {
+            const newSet = new Set(prev);
+            if (newSet.has(courseId)) {
+                newSet.delete(courseId);
+            } else {
+                newSet.add(courseId);
+            }
+            return newSet;
+        });
+    };
+
     return (
         <div key={course.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 dark:border-gray-700">
             <div className="relative">
@@ -20,14 +35,22 @@ const CourseCard = ({course}) => {
                     </span>
                 </div>
                 <div className="absolute top-4 right-4">
-                    <button className="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:shadow-lg transition-all">
-                        <Play className="h-4 w-4 text-blue-600" />
+                    {/* Bookmark */}
+                    <button
+                        onClick={() => toggleBookmark(course.id)}
+                        className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                    >
+                        {bookmarkedCourses.has(course.id) ? (
+                            <BookmarkCheck className="w-6 h-6 text-white/80 hover:text-blue-400"/>
+                        ) : (
+                            <Bookmark className="w-6 h-6 text-white hover:text-blue-400" />
+                        )}
                     </button>
                 </div>
             </div>
 
             <div className="p-6">
-                <h3 className="text-lg font-bold mb-2">{course.title}</h3>
+                <h3 className="text-lg font-semibold mb-2 max-w-full overflow-x-hidden text-ellipsis whitespace-nowrap">{course.title}</h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-3">by {course.instructor}</p>
 
                 <div className="flex items-center mb-3">

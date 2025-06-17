@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ResumeGenerateCard from '../resume/ResumeGenerateCard';
+import ResumeUploadCard from '../resume/ResumeUploadCard';
 
 const ResumeSection = () => {
     const [resumeFile, setResumeFile] = useState(null);

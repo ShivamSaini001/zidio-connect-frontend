@@ -34,7 +34,7 @@ export function ProfileDropdown() {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                        <Link to='/dashboard/teacher/profile'>
+                        <Link to='/teacher/profile'>
                             Profile
                             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                         </Link>

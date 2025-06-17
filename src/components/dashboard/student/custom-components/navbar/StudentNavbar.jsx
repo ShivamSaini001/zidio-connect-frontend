@@ -1,10 +1,38 @@
-import { BookOpen, Menu, Moon, Sun, X } from 'lucide-react'
-import React, { useState } from 'react'
-import { Link } from 'react-router';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { BookOpen, Menu, Moon, Sun, X, User, Settings, LogOut, Calendar } from 'lucide-react'
 
-const StudentNavbar = ({ darkMode, setDarkMode }) => {
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+
+const StudentNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode'));
+
+  useEffect(() => {
+    if (darkMode) {
+      localStorage.setItem('darkMode', true);
+      document.documentElement.classList.add('dark');
+    } else {
+      localStorage.setItem('darkMode', false);
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  const studentData = {
+    name: "Alex Johnson",
+    email: "alex.johnson@university.edu",
+    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+  };
 
   return (
     <div>
@@ -12,12 +40,12 @@ const StudentNavbar = ({ darkMode, setDarkMode }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0 flex items-center">
+              <Link to={'/student/home'} className="flex-shrink-0 flex items-center">
                 <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                 <span className="ml-2 text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                   Zidio Connect
                 </span>
-              </div>
+              </Link>
             </div>
 
             <div className="hidden md:block">
@@ -56,8 +84,63 @@ const StudentNavbar = ({ darkMode, setDarkMode }) => {
 
               {/* Student Profile */}
               {isLoggedIn && (
-                <div className="flex items-center space-x-3">
-                  profile
+                <div className="flex items-center relative">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+                        <Avatar className="h-9 w-9">
+                          <AvatarImage src={studentData.avatar} alt={studentData.name} />
+                          <AvatarFallback className="bg-primary text-primary-foreground">
+                            {studentData.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-80" align="end" forceMount>
+                      {/* Profile Header */}
+                      <div className="flex items-start space-x-3 p-4">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={studentData.avatar} alt={studentData.name} />
+                          <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                            {studentData.name.split(' ').map(n => n[0]).join('')}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 space-y-1">
+                          <h4 className="text-sm font-semibold text-foreground">{studentData.name}</h4>
+                          <p className="text-xs text-muted-foreground">{studentData.email}</p>
+                        </div>
+                      </div>
+
+                      <DropdownMenuSeparator />
+
+                      {/* Menu Items */}
+                      <Link to={'/student/profile'}>
+                        <DropdownMenuItem className="cursor-pointer">
+                          <User className="mr-2 h-4 w-4" />
+                          <span>View Profile</span>
+                        </DropdownMenuItem>
+                      </Link>
+                      <DropdownMenuItem className="cursor-pointer">
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        <span>My Courses</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Calendar className="mr-2 h-4 w-4" />
+                        <span>Schedule</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Settings</span>
+                      </DropdownMenuItem>
+
+                      <DropdownMenuSeparator />
+
+                      <DropdownMenuItem className="cursor-pointer text-red-600 dark:text-red-400">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        <span>Log out</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               )}
 

@@ -22,7 +22,7 @@ const InfoCard = ({title, icon, desc, className}) => {
   )
 }
 
-const TeacherDashboardHome = () => {
+const TeacherDashboard = () => {
   const dashboardInfo = [
     {
       title: 'Total Courses',
@@ -190,4 +190,4 @@ const TeacherDashboardHome = () => {
   )
 }
 
-export default TeacherDashboardHome
+export default TeacherDashboard

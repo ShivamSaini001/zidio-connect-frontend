@@ -2,6 +2,7 @@ import { Briefcase, Camera, ChevronRight, Code, Palette, Play, Star, Users } fro
 import React from 'react'
 import { Link } from 'react-router';
 import CourseCard from '../../custom-components/cards/CourseCard';
+import { Button } from '@/components/ui/button';
 
 const CourcesSection = () => {
 
@@ -49,10 +50,10 @@ const CourcesSection = () => {
     ];
 
     return (
-        <section className="py-20 bg-white dark:bg-gray-900">
+        <section className="py-10 bg-white dark:bg-gray-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">Featured Courses</h2>
+                <div className="text-center mb-10">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-1">Featured Courses</h2>
                     <p className="text-xl text-gray-600 dark:text-gray-400">Discover our most popular and highly-rated courses</p>
                 </div>
 
@@ -62,11 +63,11 @@ const CourcesSection = () => {
                     ))}
                 </div>
 
-                <div className="text-center mt-12">
-                    <button className="inline-flex items-center px-8 py-3 border-2 border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-xl hover:bg-blue-600 hover:text-white dark:hover:bg-blue-400 dark:hover:text-gray-900 transition-all font-medium">
+                <div className="text-center mt-8">
+                    <Button variant="outline" size="lg" className="border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950">
                         View All Courses
-                        <ChevronRight className="ml-2 h-5 w-5" />
-                    </button>
+                        <ChevronRight className="w-4 h-4 ml-2" />
+                    </Button>
                 </div>
             </div>
         </section>

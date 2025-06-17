@@ -1,22 +1,28 @@
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Edit } from 'lucide-react'
 import React from 'react'
 
 const AddressCard = () => {
   return (
-    <Card>
+    <Card className={'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden'}>
       <CardHeader>
-        <h2 className="scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          My Address
-        </h2>
+        <div className='flex justify-between'>
+          <p className='scroll-m-20 text-3xl font-semibold tracking-tight'>My Address</p>
+          <Button variant="outline">
+            <Edit />
+            edit
+          </Button>
+        </div>
       </CardHeader>
 
-      <CardContent className={'grid grid-cols-2 gap-5'}>
+      <CardContent className={'grid md:grid-cols-2 grid-cols-1 gap-5'}>
 
         {/* State */}
         <div className='flex flex-col gap-3'>
-          <Label htmlFor="state" className={'scroll-m-20 font-semibold tracking-tight'}>Current State</Label>
+          <Label htmlFor="state" className={'scroll-m-20 font-semibold tracking-tight'}>Current State <span className='text-red-500'>*</span></Label>
           <Input type='text'
             id='state'
             name='state'
@@ -27,7 +33,7 @@ const AddressCard = () => {
 
         {/* City  */}
         <div className='flex flex-col gap-3'>
-          <Label htmlFor="city" className={'scroll-m-20 font-semibold tracking-tight'}>Current City</Label>
+          <Label htmlFor="city" className={'scroll-m-20 font-semibold tracking-tight'}>Current City <span className='text-red-500'>*</span></Label>
           <Input type='text'
             id='city'
             name='city'
@@ -38,7 +44,7 @@ const AddressCard = () => {
 
         {/* Country */}
         <div className='flex flex-col gap-3'>
-          <Label htmlFor="country" className={'scroll-m-20 font-semibold tracking-tight'}>Country</Label>
+          <Label htmlFor="country" className={'scroll-m-20 font-semibold tracking-tight'}>Country <span className='text-red-500'>*</span></Label>
           <Input type='text'
             id='country'
             name='country'
@@ -49,7 +55,7 @@ const AddressCard = () => {
 
         {/* Zip code */}
         <div className='flex flex-col gap-3'>
-          <Label htmlFor="zipCode" className={'scroll-m-20 font-semibold tracking-tight'}>Zip code</Label>
+          <Label htmlFor="zipCode" className={'scroll-m-20 font-semibold tracking-tight'}>Zip code <span className='text-red-500'>*</span></Label>
           <Input type='number'
             id='zipCode'
             name='zipCode'

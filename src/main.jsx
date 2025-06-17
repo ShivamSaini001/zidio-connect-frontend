@@ -5,7 +5,6 @@ import App from './App';
 import Home from './components/pages/Home'
 import { AdminApp } from './components/dashboard/admin/AdminApp';
 import RecruiterDashboard from './components/dashboard/recruiter/pages/RecruiterDashboard';
-import TeacherDashboard from './components/dashboard/teacher/TeacherDashboard';
 import AdminDashboard from './components/dashboard/admin/pages/AdminDashboard';
 import UserManagement from './components/dashboard/admin/pages/UserManagement';
 import UserProfile from './components/dashboard/admin/pages/UserProfile';
@@ -26,7 +25,6 @@ import InternshipDetailsPage from './components/dashboard/student/pages/Internsh
 import StudentProfilePage from './components/dashboard/student/pages/StudentProfilePage';
 
 // Add these imports for teacher dashboard pages
-import TeacherDashboardHome from './components/dashboard/teacher/pages/TeacherDashboardHome';
 import CourseManagement from './components/dashboard/teacher/pages/CourseManagement';
 import QuizManagement from './components/dashboard/teacher/pages/QuizManagement';
 import StudentManagement from './components/dashboard/teacher/pages/StudentManagement';
@@ -35,9 +33,14 @@ import NotificationsPage from './components/dashboard/teacher/pages/Notification
 import TeacherEarnings from './components/dashboard/teacher/pages/TeacherEarnings';
 import CourseForm from './components/dashboard/recruiter/pages/CourseForm';
 import AssignmentManagement from './components/dashboard/teacher/pages/AssignmentManagement';
-import TeacherProfileForm from './components/dashboard/teacher/TeacherProfileForm';
 import StudentHomePage from './components/dashboard/student/pages/home/StudentHomePage';
 import HackathoneDetailsPage from './components/dashboard/student/pages/HackathoneDetailsPage';
+import BasicLayout from './components/dashboard/student/layout/BasicLayout';
+import RecruiterProfile from './components/dashboard/recruiter/pages/RecruiterProfile';
+import TeacherProfilePage from './components/dashboard/teacher/pages/TeacherProfilePage';
+import TeacherDashboard from './components/dashboard/teacher/pages/TeacherDashboard';
+import TeacherApp from './components/dashboard/teacher/TeacherApp';
+import AdminProfile from './components/dashboard/admin/customComponents/AdminProfile';
 
 const router = createBrowserRouter([
   {
@@ -91,6 +94,10 @@ const router = createBrowserRouter([
         element: <AdminDashboard />,
       },
       {
+        path: "/admin/profile",
+        element: <AdminProfile />,
+      },
+      {
         path: "/admin/user-management",
         element: <UserManagement />,
       },
@@ -120,16 +127,20 @@ const router = createBrowserRouter([
         path: "/recruiter/dashboard",
         element: <RecruiterDashboard />,
       },
+      {
+        path: "/recruiter/profile",
+        element: <RecruiterProfile />,
+      },
     ]
   },
   // Update the teacher dashboard route to include children routes
   {
     path: "/teacher",
-    element: <TeacherDashboard />,
+    element: <TeacherApp />,
     children: [
       {
         path: "/teacher/dashboard", // Default route
-        element: <TeacherDashboardHome />,
+        element: <TeacherDashboard />,
       },
       {
         path: "/teacher/courses",
@@ -185,7 +196,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/teacher/profile",
-        element: <TeacherProfileForm />,
+        element: <TeacherProfilePage />,
       },
       {
         path: "/teacher/earnings",
@@ -196,7 +207,7 @@ const router = createBrowserRouter([
   // Student routing
   {
     path: "/student",
-    element: "",
+    element: <BasicLayout />,
     children: [
       {
         path: "/student/home",

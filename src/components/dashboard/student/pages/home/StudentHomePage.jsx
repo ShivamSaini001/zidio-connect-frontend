@@ -4,7 +4,6 @@ import CourcesSection from './CourcesSection';
 import JobsSection from './JobsSection';
 import InternshipsSection from './InternshipsSection';
 import HackathonsSection from './HackathonsSection';
-import StudentNavbar from '../../custom-components/navbar/StudentNavbar';
 import HeroSection from './HeroSection';
 import CategoriesSection from './CategoriesSection';
 import FooterSection from './FooterSection';
@@ -13,18 +12,6 @@ import InstructorSection from './InstructorSection';
 
 
 const StudentHomePage = () => {
-    const [darkMode, setDarkMode] = useState(localStorage.getItem('darkMode'));
-    
-    useEffect(() => {
-        if (darkMode) {
-            localStorage.setItem('darkMode', true);
-            document.documentElement.classList.add('dark');
-        } else {
-            localStorage.setItem('darkMode', false);
-            document.documentElement.classList.remove('dark');
-        }
-    }, [darkMode]);
-
     const categories = [
         { icon: Code, name: "Development", courses: 1250, color: "bg-blue-500" },
         { icon: Palette, name: "Design", courses: 890, color: "bg-purple-500" },
@@ -80,10 +67,8 @@ const StudentHomePage = () => {
     ];
 
     return (
-        <div className={`min-h-screen transition-colors duration-300 ${darkMode ? 'dark' : ''}`}>
+        <div className={'min-h-screen transition-colors duration-300'}>
             <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
-                {/* Navigation Bar*/}
-                <StudentNavbar darkMode={darkMode} setDarkMode={setDarkMode} />
 
                 {/* Hero Section */}
                 <HeroSection />
@@ -146,9 +131,6 @@ const StudentHomePage = () => {
                         </div>
                     </div>
                 </section>
-
-                {/* Footer */}
-                <FooterSection />
 
             </div>
         </div>

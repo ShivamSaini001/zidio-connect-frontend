@@ -11,7 +11,7 @@ import {
 } from 'lucide-react';
 import ProfileSection from '../custom-components/profile/ProfileImage';
 import PersonalInformation from '../custom-components/profile/PersonalInformation';
-import AddressCard from '../custom-components/cards/AddressCard';
+import AddressCard from '../../common-components/AddressCard';
 import SkillsCard from '../custom-components/cards/SkillsCard';
 import EducationCard from '../custom-components/cards/EducationCard';
 import ResumeSection from '../custom-components/profile/ResumeSection';
@@ -48,23 +48,7 @@ const StudentProfilePage = () => {
         { id: 'profile', label: 'Profile', icon: User },
         { id: 'education', label: 'Education', icon: GraduationCap },
         { id: 'resume', label: 'Resume', icon: File },
-        { id: 'settings', label: 'Settings', icon: Settings }
     ];
-
-    // Initialize dark mode from system preference
-    useEffect(() => {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setDarkMode(isDark);
-    }, []);
-
-    // Apply dark mode to document
-    useEffect(() => {
-        if (darkMode) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
-    }, [darkMode]);
 
     // Validation function
     const validateProfile = () => {
@@ -112,21 +96,13 @@ const StudentProfilePage = () => {
                     className="flex justify-between items-center mb-6 md:mb-8"
                 >
                     <div>
-                        <h1 className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-1 md:mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+                        <h1 className={'*:text-2xl md:text-3xl lg:text-4xl font-bold mb-1 md:mb-2 dark:text-white text-gray-900'}>
                             My Profile
                         </h1>
-                        <p className={`text-base md:text-lg ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <p className={'not-only:text-base md:text-lg dark:text-gray-300 text-gray-600'}>
                             Manage your academic and professional journey
                         </p>
                     </div>
-
-                    {/* Dark mode toggle */}
-                    <button
-                        onClick={() => setDarkMode(!darkMode)}
-                        className={'p-2 md:p-3 rounded-full transition-all duration-300 shadow-lg hover:scale-110 dark:bg-yellow-500 dark:text-yellow-900 dark:hover:bg-yellow-400 bg-gray-800 text-yellow-400 hover:bg-gray-700'}
-                    >
-                        {darkMode ? <Sun className="w-5 h-5 md:w-6 md:h-6" /> : <Moon className="w-5 h-5 md:w-6 md:h-6" />}
-                    </button>
                 </motion.div>
 
                 {/* Navigation Tabs */}
