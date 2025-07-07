@@ -10,9 +10,22 @@ import {
     DropdownMenuShortcut,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import LogoutButton from '../../common-components/LogoutButton'
 
 export function ProfileDropdown() {
+
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            setUserData(JSON.parse(user));
+        }
+    }, []);
+
     return (
         <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
@@ -28,7 +41,7 @@ export function ProfileDropdown() {
                     <div className='flex flex-col space-y-1'>
                         <p className='text-sm leading-none font-medium'>satnaing</p>
                         <p className='text-muted-foreground text-xs leading-none'>
-                            satnaingdev@gmail.com
+                            {userData?.username || "satnaingdev@gmail.com"}
                         </p>
                     </div>
                 </DropdownMenuLabel>
@@ -37,28 +50,29 @@ export function ProfileDropdown() {
                     <DropdownMenuItem asChild>
                         <Link to='/admin/profile'>
                             Profile
-                            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link to='/settings'>
-                            Billing
-                            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                            <DropdownMenuShortcut>
+                                <UserIcon className='size-4' />
+                            </DropdownMenuShortcut>
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link to='/settings'>
                             Settings
-                            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                            <DropdownMenuShortcut>
+                                <SettingsIcon className='size-4' />
+                            </DropdownMenuShortcut>
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>New Team</DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    Log out
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem>
+                {/* <DropdownMenuItem> */}
+                <LogoutButton >
+                    <span className='flex items-center justify-between w-full px-2 py-1 text-sm hover:cursor-default hover:bg-gray-100 rounded-sm'>
+                        Logout
+                        <LogOutIcon className='size-4' />
+                    </span>
+                </LogoutButton>
+                {/* </DropdownMenuItem> */}
             </DropdownMenuContent>
         </DropdownMenu>
     )

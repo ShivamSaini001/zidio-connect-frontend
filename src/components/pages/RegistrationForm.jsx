@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { CheckCircle, AlertCircle, Loader2, Mail, Lock, User, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Mail, Lock, User, Clock } from 'lucide-react';
 import {
     Card,
     CardContent,
@@ -14,11 +14,6 @@ import {
     InputOTPSeparator,
     InputOTPSlot,
 } from "@/components/ui/input-otp";
-import {
-    Alert,
-    AlertDescription,
-    AlertTitle
-} from '@/components/ui/alert';
 import {
     Select,
     SelectContent,
@@ -41,12 +36,20 @@ import {
     TabsList,
     TabsTrigger
 } from '@/components/ui/tabs';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Checkbox } from '../ui/checkbox';
+import { registerUser, sendOTP } from '@/services/AuthService';
+import { userAlreadyLoggedIn } from '@/utils/Helper';
 
 
 
-export default function RegistrationForm({ title = 'Create your account', description = 'Sign up to get started with our platform' }) {
+export default function RegistrationForm(
+    { title = 'Create your account',
+        description = 'Sign up to get started with our platform' }) {
+
+    useEffect(() => {
+        userAlreadyLoggedIn();
+    }, []);
 
     // Form states
     const [registrationFormData, setRegistrationFormData] = new useState({
@@ -64,9 +67,12 @@ export default function RegistrationForm({ title = 'Create your account', descri
 
     // Process states
     const [step, setStep] = useState('registration'); // 'registration' or 'verification'
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [verificationSent, setVerificationSent] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
+    const [otpResponse, setOtpResponse] = useState(null);
+    const [resendOtpTime, setResendOtpTime] = new useState(0);
+    const navigate = useNavigate();
+
+    console.log(registrationFormData)
+    console.log(otpResponse)
 
     // Available roles
     const roles = [
@@ -93,8 +99,6 @@ export default function RegistrationForm({ title = 'Create your account', descri
             verificationCode: ""
         })
     }
-
-    console.log(registrationFormData)
 
     function validateRegistrationForm(formData) {
         let validForm = true;
@@ -178,7 +182,30 @@ export default function RegistrationForm({ title = 'Create your account', descri
     }
 
     // Handle form submission
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        // Otp is empty
+        if (!registrationFormData.verificationCode) {
+            setFormError((prevState) => ({ ...prevState, verificationCode: 'Please fill in your OTP.' }))
+            return;
+        }
+        // Otp is valid
+        if (!/^[0-9]{6}$/.test(String(registrationFormData.verificationCode).trim())) {
+            setFormError((prevState) => ({ ...prevState, verificationCode: 'Please enter a valid 6 digit OTP.' }));
+            return;
+        }
+
+        const isSuccess = await registerUser(registrationFormData);
+        console.log(isSuccess)
+        if (isSuccess) {
+            // Redirect to the login page
+            console.log(isSuccess)
+            navigate('/sign-in');
+        }
+
+    };
+
+    // Handle verification code submission
+    const handleVerify = async (e) => {
         if (!validateRegistrationForm(registrationFormData) || !registrationFormData.selectedRole || !acceptTermsAndConditions) {
             if (!registrationFormData.selectedRole) {
                 setFormError((prevState) => ({ ...prevState, selectedRole: "Please select your role!!" }))
@@ -189,53 +216,35 @@ export default function RegistrationForm({ title = 'Create your account', descri
             return;
         }
 
-        setIsSubmitting(true);
-
-        // Simulate API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setVerificationSent(true);
+        e.target.disabled = true;
+        const response = await sendOTP(registrationFormData.email);
+        if (response != undefined) {
+            console.log(response)
+            setOtpResponse(response);
+            setResendOtpTime(response.otpResendAfterSeconds);
             setStep('verification');
-            // Generate a mock verification code
-            const mockCode = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log(`Verification code sent: ${mockCode}`);
-            setSuccessMessage('Verification code sent! Please check your email.');
-        }, 1500);
-    };
-
-    // Handle verification code submission
-    const handleVerify = () => {
-        if (!registrationFormData.verificationCode) {
-            setFormError((prevState) => ({ ...prevState, verificationCode: 'Please fill in your OTP.' }))
-            return;
+        } else {
+            e.target.disabled = false;
         }
-        if (!/^[0-9]{6}$/.test(String(registrationFormData.verificationCode).trim())) {
-            setFormError((prevState) => ({ ...prevState, verificationCode: 'Please enter a valid 6 digit OTP.' }));
-            return;
-        }
-        setIsSubmitting(true);
-
-        // Simulate verification API call
-        setTimeout(() => {
-            setIsSubmitting(false);
-            setSuccessMessage('Registration successful! You can now log in.');
-        }, 1500);
     };
 
     // Resend verification code
     const handleResendCode = () => {
-        setIsSubmitting(true);
-
-        setTimeout(() => {
-            setIsSubmitting(false);
-            const mockCode = Math.floor(100000 + Math.random() * 900000).toString();
-            console.log(`New verification code sent: ${mockCode}`);
-            setSuccessMessage('A new verification code has been sent to your email!');
-        }, 1000);
+        setRegistrationFormData((prevState) => ({ ...prevState, verificationCode: "" }));
+        setFormError((prevState) => ({ ...prevState, verificationCode: "" }));
+        handleVerify();
     };
 
+    function updateResendOtpTime(prevTime) {
+        if (prevTime > 0) {
+            setTimeout(() => {
+                setResendOtpTime(prevTime - 1);
+            }, 1000);
+        }
+    }
+
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-400 to-purple-500">
             <div className="w-full max-w-md space-y-8">
                 <div className="text-center">
                     <h2 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -257,7 +266,7 @@ export default function RegistrationForm({ title = 'Create your account', descri
                         </TabsTrigger>
                         <TabsTrigger
                             value="verification"
-                            disabled={!verificationSent}
+                            disabled={otpResponse === null}
                             onClick={() => step === 'verification' ? null : setStep('verification')}
                         >
                             Verification
@@ -444,17 +453,15 @@ export default function RegistrationForm({ title = 'Create your account', descri
                             <CardFooter className={'flex flex-col gap-5'}>
                                 <Button
                                     className="w-full"
-                                    onClick={handleSubmit}
-                                    disabled={isSubmitting}
+                                    onClick={handleVerify}
+                                    disabled={resendOtpTime > 0}
                                 >
-                                    {isSubmitting ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Processing...
-                                        </>
-                                    ) : (
-                                        "Register"
-                                    )}
+                                    Verify Email
+                                    {
+                                        resendOtpTime > 0 && <span className="text-red-500">
+                                            ({resendOtpTime}s)
+                                        </span>
+                                    }
                                 </Button>
                                 <p>
                                     Already have an account? &nbsp;
@@ -470,21 +477,31 @@ export default function RegistrationForm({ title = 'Create your account', descri
                     <TabsContent value="verification">
                         <Card>
                             <CardHeader>
-                                <CardTitle>Email Verification</CardTitle>
-                                <CardDescription>
-                                    We've sent a verification code to {registrationFormData.email}
+                                <CardTitle className="text-2xl font-bold text-center text-primary">
+                                    Email Verification
+                                </CardTitle>
+                                <CardDescription className="text-center space-y-2">
+                                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                        <p className="text-blue-600 font-medium">
+                                            We've sent a verification code to{' '}
+                                            <span className="font-bold underline decoration-2">
+                                                {registrationFormData.email}
+                                            </span>
+                                        </p>
+                                        <p className="text-blue-500 mt-5">
+                                            <span className="inline-flex items-center">
+                                                <Clock className="h-4 w-4 me-2 text-blue-600" />
+                                                OTP will be valid for{' '}
+                                                <span className="font-semibold mx-1">
+                                                    {otpResponse?.otpValidityInMinutes ?? 0}
+                                                </span>
+                                                Minutes
+                                            </span>
+                                        </p>
+                                    </div>
                                 </CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-4">
-                                {/* Success Message */}
-                                {successMessage && (
-                                    <Alert className="bg-green-50 border-green-200">
-                                        <CheckCircle className="h-4 w-4 text-green-500" />
-                                        <AlertTitle>Success</AlertTitle>
-                                        <AlertDescription>{successMessage}</AlertDescription>
-                                    </Alert>
-                                )}
-
                                 {/* Verification Code */}
                                 <div className="space-y-2 ">
                                     <Label htmlFor="verificationCode">Enter OTP</Label>
@@ -522,31 +539,35 @@ export default function RegistrationForm({ title = 'Create your account', descri
                             <CardFooter className="flex flex-col space-y-2">
                                 <Button
                                     className="w-full"
-                                    onClick={handleVerify}
-                                    disabled={isSubmitting}
+                                    onClick={handleSubmit}
                                 >
-                                    {isSubmitting ? (
-                                        <>
-                                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                            Verifying...
-                                        </>
-                                    ) : (
-                                        "Verify Account"
-                                    )}
+                                    Submit
                                 </Button>
                                 <div className="flex justify-between w-full text-sm">
                                     <Button
                                         variant="link"
                                         onClick={handleResendCode}
-                                        disabled={isSubmitting}
                                         className="p-0 h-auto"
+                                        disabled={resendOtpTime > 0}
                                     >
                                         Resend OTP
+                                        {
+                                            resendOtpTime > 0 && <span className="text-red-500">
+                                                ({resendOtpTime}s)
+                                            </span>
+                                        }
+                                        {/* update time using IIFE function*/}
+                                        {
+                                            updateResendOtpTime(resendOtpTime)
+                                        }
                                     </Button>
                                     <Button
                                         variant="link"
-                                        onClick={() => setStep('registration')}
-                                        disabled={isSubmitting}
+                                        onClick={() => {
+                                            setRegistrationFormData((prev) => ({ ...prev, verificationCode: "" }));
+                                            setFormError((prev) => ({ ...prev, verificationCode: "" }));
+                                            setStep('registration')
+                                        }}
                                         className="p-0 h-auto"
                                     >
                                         Edit details

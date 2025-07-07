@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, X, Search, Bell, ChevronDown, User } from 'lucide-react';
+import { Menu, X, Search, Bell, ChevronDown, User, SignalIcon } from 'lucide-react';
 import { ThemeSwitch } from '../context/ThemeSwitch';
+import { Link } from 'react-router';
+import { Button } from '@mui/material';
 
 
 export default function Navbar() {
@@ -46,31 +48,6 @@ export default function Navbar() {
     },
     { name: 'Community', href: '/community' },
   ];
-
-  // Secondary Navigation (varies by user role)
-  const roleSpecificLinks = {
-    student: [
-      { name: 'My Applications', href: '/dashboard/applications' },
-      { name: 'Saved Courses', href: '/dashboard/courses' },
-      { name: 'Learning Path', href: '/dashboard/learning-path' },
-    ],
-    recruiter: [
-      { name: 'Manage Listings', href: '/dashboard/listings' },
-      { name: 'Candidates', href: '/dashboard/candidates' },
-      { name: 'Analytics', href: '/dashboard/analytics' },
-    ],
-    teacher: [
-      { name: 'My Courses', href: '/dashboard/mycourses' },
-      { name: 'Student Progress', href: '/dashboard/students' },
-      { name: 'Earnings', href: '/dashboard/earnings' },
-    ],
-    admin: [
-      { name: 'Admin Panel', href: '/admin', highlight: true },
-    ],
-  };
-
-  // For demo - in real implementation this would come from auth context
-  const [userRole, setUserRole] = useState('student');
 
   // Handle navbar background change on scroll
   useEffect(() => {
@@ -202,18 +179,6 @@ export default function Navbar() {
 
           {/* Right side navigation - Search, Notifications, User Menu */}
           <div className="flex items-center space-x-2 md:space-x-4">
-            {/* Search */}
-            <button className="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-              <span className="sr-only">Search</span>
-              <Search className="h-5 w-5" />
-            </button>
-
-            {/* Notifications */}
-            <button className="bg-gray-800 p-2 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
-              <span className="sr-only">View notifications</span>
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500 ring-2 ring-gray-800"></span>
-            </button>
 
             {/* Theme switch */}
             <button className="bg-gray-800 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white relative">
@@ -222,20 +187,18 @@ export default function Navbar() {
               </span>
             </button>
 
+            {/* Sign up button */}
+            <Link to="/sign-up">
+              <Button variant="contained">Register</Button>
+            </Link>
+
+            {/* Sign in button */}
+            <Link to="/sign-in" className='text-white outline-white'>
+              <Button variant="outlined"  color='inherit'>Login</Button>
+            </Link>
+
             {/* User menu */}
             <div className="relative ml-3">
-              <div>
-                <button
-                  onClick={() => toggleDropdown('profile')}
-                  className="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                  data-dropdown-trigger="true"
-                >
-                  <span className="sr-only">Open user menu</span>
-                  <div className="h-8 w-8 rounded-full bg-gray-700 flex items-center justify-center text-gray-300 border-2 border-gray-600">
-                    <User className="h-5 w-5" />
-                  </div>
-                </button>
-              </div>
 
               {/* User dropdown menu */}
               {activeDropdown === 'profile' && (
@@ -248,20 +211,6 @@ export default function Navbar() {
                       <p className="text-sm text-white">Signed in as</p>
                       <p className="text-sm font-medium text-gray-300 truncate">user@example.com</p>
                     </div>
-                  </div>
-                  <div className="py-1">
-                    {roleSpecificLinks[userRole].map((item, index) => (
-                      <a
-                        key={index}
-                        href={item.href}
-                        className={`block px-4 py-2 text-sm ${item.highlight
-                          ? 'text-blue-400 hover:bg-gray-700'
-                          : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                          }`}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
                   </div>
                   <div className="py-1 border-t border-gray-700">
                     <a href="/settings" className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white">
@@ -332,61 +281,6 @@ export default function Navbar() {
               )}
             </div>
           ))}
-        </div>
-
-        {/* Mobile role selection */}
-        <div className="px-4 py-3 border-t border-gray-700">
-          <div className="flex items-center">
-            <label htmlFor="mobile-role-select" className="block text-sm font-medium text-gray-300 mr-2">
-              Role:
-            </label>
-            <select
-              id="mobile-role-select"
-              value={userRole}
-              onChange={(e) => setUserRole(e.target.value)}
-              className="bg-gray-800 text-sm text-gray-300 rounded-md py-1 px-2 border border-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="student">Student</option>
-              <option value="recruiter">Recruiter</option>
-              <option value="teacher">Teacher</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Mobile user-specific links */}
-        <div className="pt-4 pb-3 border-t border-gray-700">
-          <div className="flex items-center px-5">
-            <div className="flex-shrink-0">
-              <div className="h-10 w-10 rounded-full bg-gray-700 flex items-center justify-center text-gray-300 border-2 border-gray-600">
-                <User className="h-6 w-6" />
-              </div>
-            </div>
-            <div className="ml-3">
-              <div className="text-base font-medium text-white">User Name</div>
-              <div className="text-sm font-medium text-gray-400">user@example.com</div>
-            </div>
-          </div>
-          <div className="mt-3 px-2 space-y-1">
-            {roleSpecificLinks[userRole].map((item, index) => (
-              <a
-                key={index}
-                href={item.href}
-                className={`block px-3 py-2 rounded-md text-base font-medium ${item.highlight
-                  ? 'text-blue-400 hover:bg-gray-700'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }`}
-              >
-                {item.name}
-              </a>
-            ))}
-            <a href="/settings" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-              Settings
-            </a>
-            <a href="/logout" className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:bg-gray-700 hover:text-white">
-              Sign out
-            </a>
-          </div>
         </div>
       </div>
     </nav>

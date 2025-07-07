@@ -7,9 +7,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { Select as MUISelect, FormControl, InputLabel, ListItemText, MenuItem, OutlinedInput, Box, Chip } from '@mui/material';
 import { CheckBox } from '@mui/icons-material';
 
-const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handleMultiSelectChange }) => {
-
-    console.log(formData.specializations);
+const ProfessionalDetailsCard = ({ formData, handleInputChange, handleSelectChange, isEditing, handleMultiSelectChange }) => {
 
     const teacherDesignations = [
         "Instructor",
@@ -160,7 +158,13 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                     {/* Designation */}
                     <div className='flex flex-col gap-2'>
                         <Label htmlFor="designation">Designation / Role <span className='text-red-500'>*</span></Label>
-                        <Select id="designation" disabled={!isEditing}>
+                        <Select
+                            id="designation"
+                            name="designation"
+                            value={formData.designation ?? ''}
+                            onValueChange={(value) => handleSelectChange("designation", value)}
+                            disabled={!isEditing}
+                        >
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Select Designation" />
                             </SelectTrigger>
@@ -177,12 +181,14 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
 
                     {/* Teaching Experience */}
                     <div className='flex flex-col gap-2'>
-                        <Label htmlFor="teachingExperience">Teaching Experience (Years) <span className='text-red-500'>*</span></Label>
+                        <Label htmlFor="yearOfExperience">Teaching Experience (Years) <span className='text-red-500'>*</span></Label>
                         <Input
-                            id="teachingExperience"
+                            id="yearOfExperience"
+                            name="yearOfExperience"
                             type="number"
-                            value={formData.teachingExperience}
-                            onChange={(e) => handleInputChange('teachingExperience', parseInt(e.target.value))}
+                            placeholder="Enter experience"
+                            value={formData.yearOfExperience ?? ''}
+                            onChange={handleInputChange}
                             disabled={!isEditing}
                         />
                     </div>
@@ -191,7 +197,13 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                 {/* Highest Qualification */}
                 <div className='flex flex-col gap-2'>
                     <Label htmlFor="highestQualification">Highest Qualification <span className='text-red-500'>*</span></Label>
-                    <Select id="highestQualification" disabled={!isEditing}>
+                    <Select
+                        id="highestQualification"
+                        name="highestQualification"
+                        value={formData.highestQualification ?? ''}
+                        onValueChange={(value) => handleSelectChange("highestQualification", value)}
+                        disabled={!isEditing}
+                    >
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select Highest Qualification" />
                         </SelectTrigger>
@@ -213,9 +225,10 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                         <MUISelect
                             labelId="specializations-checkbox-label"
                             id="specializations-checkbox"
+                            name='specializations'
                             multiple
                             value={formData.specializations}
-                            onChange={(e) => handleInputChange('specializations', e.target.value, e.target.checked)}
+                            onChange={handleInputChange}
                             input={<OutlinedInput label="Specializations" />}
                             renderValue={(selected) => (
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -229,7 +242,7 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                             {teacherSpecializations.map((specialization, index) => (
                                 <MenuItem key={index} value={specialization}>
                                     <Checkbox
-                                        checked={formData.specializations.indexOf(specialization) > -1}
+                                        checked={formData?.specializations?.indexOf(specialization) > -1}
                                         className='mr-2'
                                     />
                                     <ListItemText primary={specialization} />
@@ -246,9 +259,10 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                         <MUISelect
                             labelId="language-known-checkbox-label"
                             id="language-known-checkbox"
+                            name="languagesKnown"
                             multiple
                             value={formData.languagesKnown}
-                            onChange={(e) => handleInputChange('languagesKnown', e.target.value, e.target.checked)}
+                            onChange={handleInputChange}
                             input={<OutlinedInput label="Language Known" />}
                             renderValue={(selected) => (
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -262,7 +276,7 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                             {languagesKnown.map((language, index) => (
                                 <MenuItem key={index} value={language}>
                                     <Checkbox
-                                        checked={formData.languagesKnown.indexOf(language) > -1}
+                                        checked={formData?.languagesKnown?.indexOf(language) > -1}
                                         className='mr-2'
                                     />
                                     <ListItemText primary={language} />
@@ -272,8 +286,6 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                     </FormControl>
                 </div>
 
-
-
                 {/* Mode of Teaching */}
                 <div className='flex flex-col gap-2'>
                     <Label>Mode of Teaching <span className='text-red-500'>*</span></Label>
@@ -282,8 +294,10 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                             <div key={mode} className="flex items-center space-x-2">
                                 <Checkbox
                                     id={mode}
-                                    checked={formData.modeOfTeaching.includes(mode)}
-                                    onCheckedChange={(checked) => handleMultiSelectChange('modeOfTeaching', mode, checked)}
+                                    name="modeOfTeaching"
+                                    value={mode}
+                                    checked={formData?.modeOfTeaching?.includes(mode)}
+                                    onCheckedChange={(checked) => handleMultiSelectChange("modeOfTeaching", mode, checked)}
                                     disabled={!isEditing}
                                 />
                                 <Label htmlFor={mode} className="text-sm">{mode}</Label>
@@ -300,7 +314,8 @@ const ProfessionalDetailsCard = ({ formData, handleInputChange, isEditing, handl
                             <div key={level} className="flex items-center space-x-2">
                                 <Checkbox
                                     id={level}
-                                    checked={formData.preferredStudentLevel.includes(level)}
+                                    name="preferredStudentLevel"
+                                    checked={formData?.preferredStudentLevel?.includes(level)}
                                     onCheckedChange={(checked) => handleMultiSelectChange('preferredStudentLevel', level, checked)}
                                     disabled={!isEditing}
                                 />

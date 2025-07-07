@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { BookOpen, Menu, Moon, Sun, X, User, Settings, LogOut, Calendar } from 'lucide-react'
+import { BookOpen, Menu, Moon, Sun, X, User, Settings, LogOut, Calendar, LogOutIcon } from 'lucide-react'
 
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import LogoutButton from '@/components/dashboard/common-components/LogoutButton';
 
 const StudentNavbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -135,10 +136,13 @@ const StudentNavbar = () => {
 
                       <DropdownMenuSeparator />
 
-                      <DropdownMenuItem className="cursor-pointer text-red-600 dark:text-red-400">
-                        <LogOut className="mr-2 h-4 w-4" />
-                        <span>Log out</span>
-                      </DropdownMenuItem>
+                      {/* Logout */}
+                        <LogoutButton >
+                          <span className="relative flex select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer">
+                            <LogOutIcon className="mr-2 h-4 w-4" />
+                            <span>Logout</span>
+                          </span>
+                        </LogoutButton>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

@@ -2,15 +2,44 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { loginUser } from "@/services/AuthService"
+import { userAlreadyLoggedIn, redirectUser } from "@/utils/Helper"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export function LoginPage() {
+    useEffect(() => {
+        userAlreadyLoggedIn();
+    }, []);
+
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    });
+
+    const [passwordType, setPasswordType] = useState("text");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const user = await loginUser(formData);
+        if (user !== null) {
+            localStorage.setItem("user", JSON.stringify(user));
+            redirectUser(user.roles);
+        }
+    }
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    };
+
     return (
         <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
             <div className="w-full max-w-sm md:max-w-3xl">
                 <div className={"flex flex-col gap-6"}>
                     <Card className="overflow-hidden p-0">
                         <CardContent className="grid p-0 md:grid-cols-2">
-                            <form className="p-6 md:p-8">
+                            <form className="p-6 md:p-8" onSubmit={handleSubmit}>
                                 <div className="flex flex-col gap-6">
                                     <div className="flex flex-col items-center text-center">
                                         <h1 className="text-2xl font-bold">Welcome back</h1>
@@ -23,6 +52,9 @@ export function LoginPage() {
                                         <Input
                                             id="email"
                                             type="email"
+                                            name="username"
+                                            value={formData.email}
+                                            onChange={handleChange}
                                             placeholder="m@example.com"
                                             required
                                         />
@@ -37,7 +69,24 @@ export function LoginPage() {
                                                 Forgot your password?
                                             </a>
                                         </div>
-                                        <Input id="password" type="password" required />
+                                        <div className="relative">
+                                            <Input
+                                                id="password"
+                                                type={passwordType}
+                                                name="password"
+                                                value={formData.password}
+                                                onChange={handleChange}
+                                                placeholder="********"
+                                                required />
+
+                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 z-50">
+                                                {
+                                                    passwordType === "text" ?
+                                                        <EyeIcon className="size-5" onClick={() => setPasswordType("password")} />
+                                                        : <EyeOffIcon className="size-5" onClick={() => setPasswordType("text")} />
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                     <Button type="submit" className="w-full">
                                         Login

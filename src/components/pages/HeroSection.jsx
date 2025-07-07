@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ChevronRight, Briefcase, Code, BookOpen, Users } from 'lucide-react';
 
-export default function home() {
+export default function HeroSection() {
   const [activeTab, setActiveTab] = useState('student');
 
   const roleInfo = {

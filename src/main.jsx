@@ -2,7 +2,6 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router'
 import App from './App';
-import Home from './components/pages/Home'
 import { AdminApp } from './components/dashboard/admin/AdminApp';
 import RecruiterDashboard from './components/dashboard/recruiter/pages/RecruiterDashboard';
 import AdminDashboard from './components/dashboard/admin/pages/AdminDashboard';
@@ -33,7 +32,7 @@ import NotificationsPage from './components/dashboard/teacher/pages/Notification
 import TeacherEarnings from './components/dashboard/teacher/pages/TeacherEarnings';
 import CourseForm from './components/dashboard/recruiter/pages/CourseForm';
 import AssignmentManagement from './components/dashboard/teacher/pages/AssignmentManagement';
-import StudentHomePage from './components/dashboard/student/pages/home/StudentHomePage';
+import StudentHomePage from './components/dashboard/student/pages/StudentHomePage';
 import HackathoneDetailsPage from './components/dashboard/student/pages/HackathoneDetailsPage';
 import BasicLayout from './components/dashboard/student/layout/BasicLayout';
 import RecruiterProfile from './components/dashboard/recruiter/pages/RecruiterProfile';
@@ -41,6 +40,10 @@ import TeacherProfilePage from './components/dashboard/teacher/pages/TeacherProf
 import TeacherDashboard from './components/dashboard/teacher/pages/TeacherDashboard';
 import TeacherApp from './components/dashboard/teacher/TeacherApp';
 import AdminProfile from './components/dashboard/admin/customComponents/AdminProfile';
+import HeroSection from './components/pages/HeroSection';
+import HomePage from './components/pages/HomePage';
+import { ToastContainer } from 'react-toastify';
+import Logout from './components/dashboard/common-components/LogoutButton';
 
 const router = createBrowserRouter([
   {
@@ -49,21 +52,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <HomePage />,
+      },
+      {
+        path: "/sign-in",
+        element: <LoginPage />,
+      },
+      {
+        path: "/sign-up",
+        element: <RegistrationForm />,
+      },
+      {
+        path: "/forgot-password",
+        element: <h1 className='text-4xl'>This page is under maintanance.</h1>,
       },
     ]
-  },
-  {
-    path: "/sign-in",
-    element: <LoginPage />,
-  },
-  {
-    path: "/sign-up",
-    element: <RegistrationForm />,
-  },
-  {
-    path: "/forgot-password",
-    element: <h1 className='text-4xl'>This page is under maintanance.</h1>,
   },
   {
     path: "/401",
@@ -238,5 +241,11 @@ const router = createBrowserRouter([
 ]);
 
 createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+  <>
+    <RouterProvider router={router} />
+    <ToastContainer
+      position='top-right'
+      draggable
+    />
+  </>
 )

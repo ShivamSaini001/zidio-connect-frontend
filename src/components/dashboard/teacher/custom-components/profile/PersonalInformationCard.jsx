@@ -6,7 +6,8 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from '@/components/ui/textarea'
 import { Mail, PhoneIcon, User } from 'lucide-react'
 
-const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => {
+const PersonalInformationCard = ({ formData, handleInputChange, handleSelectChange, isEditing }) => {
+
     return (
         <Card>
             <CardHeader>
@@ -21,9 +22,11 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                         <div className='relative'>
                             <Input
                                 id="firstName"
+                                name="firstName"
                                 type="text"
-                                value={formData.firstName}
-                                onChange={(e) => handleInputChange('firstName', e.target.value)}
+                                value={formData.firstName ?? ''}
+                                onChange={handleInputChange}
+                                placeholder="Enter here"
                                 className="pl-8"
                                 disabled={!isEditing}
                             />
@@ -37,9 +40,11 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                         <div className='relative'>
                             <Input
                                 id="lastName"
+                                name="lastName"
                                 type="text"
-                                value={formData.lastName}
-                                onChange={(e) => handleInputChange('lastName', e.target.value)}
+                                value={formData.lastName ?? ''}
+                                onChange={handleInputChange}
+                                placeholder="Enter here"
                                 className="pl-8"
                                 disabled={!isEditing}
                             />
@@ -54,10 +59,9 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                             <Input
                                 id="email"
                                 type="email"
-                                value={formData.email}
-                                onChange={(e) => handleInputChange('email', e.target.value)}
+                                value={JSON.parse(localStorage.getItem('user'))?.username}
                                 className="pl-8"
-                                disabled={!isEditing}
+                                disabled={true}
                             />
                             <Mail className='absolute size-5 left-2 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -65,12 +69,14 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
 
                     {/* Phone Number */}
                     <div className='flex flex-col gap-2'>
-                        <Label htmlFor="phone">Phone Number <span className="text-red-500">*</span></Label>
+                        <Label htmlFor="mobile">Phone Number <span className="text-red-500">*</span></Label>
                         <div className='relative'>
                             <Input
-                                id="phone"
-                                value={formData.phone}
-                                onChange={(e) => handleInputChange('phone', e.target.value)}
+                                id="mobile"
+                                name="mobile"
+                                value={formData.mobile ?? ''}
+                                onChange={handleInputChange}
+                                placeholder="0000000000"
                                 className="pl-8"
                                 disabled={!isEditing}
                             />
@@ -81,7 +87,13 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                     {/* Gender */}
                     <div className='flex flex-col gap-2'>
                         <Label htmlFor="gender">Gender <span className="text-red-500">*</span></Label>
-                        <Select value={formData.gender} onValueChange={(value) => handleInputChange('gender', value)} disabled={!isEditing}>
+                        <Select
+                            id="gender"
+                            name="gender"
+                            value={formData.gender ?? ''}
+                            onValueChange={(value) => handleSelectChange("gender", value)}
+                            disabled={!isEditing}
+                        >
                             <SelectTrigger className='w-full'>
                                 <SelectValue placeholder="Select gender" />
                             </SelectTrigger>
@@ -98,24 +110,13 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                         <Label htmlFor="dateOfBirth">Date of Birth <span className="text-red-500">*</span></Label>
                         <Input
                             id="dateOfBirth"
+                            name="dateOfBirth"
                             type="date"
-                            value={formData.dateOfBirth}
-                            onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
+                            value={formData.dateOfBirth ?? ''}
+                            onChange={handleInputChange}
                             disabled={!isEditing}
                         />
                     </div>
-
-                    {/* Country */}
-                    <div className='flex flex-col gap-2'>
-                        <Label htmlFor="country">Country <span className="text-red-500">*</span></Label>
-                        <Input
-                            id="country"
-                            value={formData.country}
-                            onChange={(e) => handleInputChange('country', e.target.value)}
-                            disabled={!isEditing}
-                        />
-                    </div>
-
                 </div>
 
                 {/* Bio */}
@@ -123,13 +124,14 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                     <Label htmlFor="bio">Bio <span className="text-red-500">*</span></Label>
                     <Textarea
                         id="bio"
-                        value={formData.bio}
-                        onChange={(e) => handleInputChange('bio', e.target.value)}
+                        name="bio"
+                        value={formData.bio ?? ''}
+                        onChange={handleInputChange}
                         placeholder="300–500 characters introduction"
                         rows={4}
                         disabled={!isEditing}
                     />
-                    <p className="text-sm text-gray-500 mt-1">{formData.bio.length} characters</p>
+                    <p className="text-sm text-gray-500 mt-1">{formData?.bio?.length} characters</p>
                 </div>
 
                 {/* LinkedIn Profile */}
@@ -137,9 +139,24 @@ const PersonalInformationCard = ({ formData, handleInputChange, isEditing }) => 
                     <Label htmlFor="linkedinProfile">LinkedIn Profile</Label>
                     <Input
                         id="linkedinProfile"
-                        value={formData.linkedinProfile}
-                        onChange={(e) => handleInputChange('linkedinProfile', e.target.value)}
+                        name="linkedinProfileUrl"
+                        value={formData.linkedinProfileUrl ?? ''}
+                        onChange={handleInputChange}
                         placeholder="https://linkedin.com/in/username"
+                        disabled={!isEditing}
+                    />
+                </div>
+
+                {/* Portfolio */}
+                <div className='flex flex-col gap-2'>
+                    <Label htmlFor="portfolioWebsite">Portfolio Website Url</Label>
+                    <Input
+                        id="portfolioWebsite"
+                        name="portfolioWebsiteUrl"
+                        value={formData.portfolioWebsiteUrl ?? ''}
+                        onChange={handleInputChange}
+                        className="mt-1"
+                        placeholder="Personal website or GitHub"
                         disabled={!isEditing}
                     />
                 </div>

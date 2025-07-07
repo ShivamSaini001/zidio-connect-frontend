@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -6,50 +6,70 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Star, Upload, Verified, Award, Users, BookOpen, Calendar, MapPin, Mail, Phone, Globe, Linkedin, FileText, X, Download, Edit, Save, XCircle, XIcon, SaveIcon, EditIcon } from 'lucide-react';
+import { Star, Upload, Verified, Award, Users, BookOpen, MapPin, FileText, X, Download, XIcon, SaveIcon, EditIcon } from 'lucide-react';
 import PersonalInformationCard from '../custom-components/profile/PersonalInformationCard';
 import AddressCard from '../../common-components/AddressCard';
 import ProfessionalDetailsCard from '../custom-components/profile/ProfessionalDetailsCard';
+import { getCurrentUserEmail, getTeacherProfileByEmail, updateTeacherProfile } from '@/services/UserProfileService';
 
 const TeacherProfilePage = () => {
+
   const [formData, setFormData] = useState({
     // Personal Information
-    firstName: 'Sarah',
-    lastName: 'Johnson',
-    email: 'sarah.johnson@university.edu',
-    phone: '+1-555-0123',
-    profilePicture: 'https://images.unsplash.com/photo-1494790108755-2616b332c108?w=150&h=150&fit=crop&crop=face',
-    gender: 'Female',
-    dateOfBirth: '1985-03-15',
-    linkedinProfile: 'https://linkedin.com/in/sarahjohnson',
-    country: 'United States',
-    bio: 'Passionate educator with 8+ years of experience in computer science and software development. Specializing in modern web technologies and machine learning applications.',
-
+    firstName: '',
+    lastName: '',
+    mobile: '',
+    gender: '',
+    dateOfBirth: '',
+    bio: '',
+    profileImageUrl: '',
+    linkedinProfileUrl: '',
 
     // Professional Details
-    designation: 'Assistant Professor',
-    teachingExperience: 8,
-    highestQualification: 'Ph.D in Computer Science',
-    specializations: ['JavaScript', 'React', 'Node.js', 'Machine Learning', 'Data Structures'],
-    languagesKnown: ['English', 'Hindi', 'French'],
+    designation: '',
+    yearOfExperience: '',
+    highestQualification: '',
+    specializations: [],
+    languagesKnown: [],
 
     // Teaching Preferences
-    modeOfTeaching: ['Online', 'Hybrid'],
-    preferredStudentLevel: ['College', 'Working Professionals'],
+    modeOfTeaching: [],
+    preferredStudentLevel: [],
 
     // Portfolio
     resumeUpload: null,
     certifications: [],
-    demoVideoLink: 'https://youtube.com/watch?v=demo123',
-    portfolioWebsite: 'https://sarahjohnson.dev',
+    portfolioWebsiteUrl: '',
 
     // System fields
     isVerified: true,
     isFeatured: true,
-    teacherRating: 4.8,
-    totalEnrollments: 1247
+    teacherRating: 0.0,
+    totalEnrollments: 0
   });
+
+  console.log(formData)
+
+  useEffect(() => {
+    const teacherProfile = getTeacherProfileByEmail(getCurrentUserEmail());
+    teacherProfile.then((data) => {
+      console.log(data);
+      setFormData(data);;
+    })
+  }, []);
+
+  const [formDataBackup, setFormDataBackup] = useState(null);
+
+  const [address, setAddress] = useState({
+    city: 'Anytown',
+    state: 'CA',
+    zipCode: '12345',
+    country: 'United State'
+  });
+
+  const [profileImage, setProfileImage] = useState(null);
+  const [resumeUpload, setResumeUpload] = useState(null);
+  const [certifications, setCertifications] = useState([]);
 
   const [activeTab, setActiveTab] = useState('personal');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
@@ -66,7 +86,7 @@ const TeacherProfilePage = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         setTimeout(() => {
-          handleInputChange('profilePicture', e.target.result);
+          handleInputChange('profileImageUrl', e.target.result);
           setIsUploadingImage(false);
         }, 1000); // Simulate upload delay
       };
@@ -136,35 +156,45 @@ const TeacherProfilePage = () => {
     document.getElementById('certificationUpload').click();
   };
 
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
+  // Handle Save, Edit and Delete.
   const handleCancel = () => {
     setIsEditing(false);
     // You can add logic here to revert changes if needed
+    setFormData(formDataBackup);
+  };
+
+  const handleEdit = (e) => {
+    setIsEditing(true);
+    setFormDataBackup({ ...formData });
   };
 
   const handleSave = () => {
     setIsEditing(false);
     // Add your save logic here (API call, etc.)
-    alert('Profile saved successfully!');
+    console.log(getCurrentUserEmail())
+    const updatedProfileData = updateTeacherProfile(getCurrentUserEmail(), formData);
+    updatedProfileData.then((data) => {
+      console.log(data);
+      setFormData(data);
+      setFormDataBackup(null);
+    });
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleMultiSelectChange = (field, value, checked) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: checked
-        ? [...prev[field], value]
-        : prev[field].filter(item => item !== value)
-    }));
+  const handleSelectChange = (key, value) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  }
+
+  const handleMultiSelectChange = (name, value, isChecked) => {
+    if (isChecked) {
+      setFormData(prev => ({ ...prev, [name]: [...prev[name], value] }))
+    } else {
+      setFormData(prev => ({ ...prev, [name]: prev[name].filter(item => item !== value) }))
+    }
   };
 
   const renderStars = (rating) => {
@@ -229,13 +259,13 @@ const TeacherProfilePage = () => {
       {/* Show Profile Details Card */}
       <Card className="relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4">
-          {formData.isVerified && (
+          {formData?.isVerified && (
             <Badge variant="secondary" className="bg-blue-100 text-blue-800">
               <Verified className="w-3 h-3 mr-1" />
               Verified
             </Badge>
           )}
-          {formData.isFeatured && (
+          {formData?.isFeatured && (
             <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 ml-2">
               <Award className="w-3 h-3 mr-1" />
               Featured
@@ -248,8 +278,8 @@ const TeacherProfilePage = () => {
             {/* Upload profile picture */}
             <div className="relative">
               <Avatar className="w-24 h-24">
-                <AvatarImage src={formData.profilePicture} alt={formData.fullName} />
-                <AvatarFallback>{formData.firstName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                <AvatarImage src={formData?.profileImageUrl} alt={formData.firstName + formData.lastName} />
+                <AvatarFallback>{formData?.firstName?.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               {isUploadingImage && (
                 <div className="w-24 h-24 absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center">
@@ -286,29 +316,29 @@ const TeacherProfilePage = () => {
               <div className="flex items-center space-x-4 text-sm text-muted-foreground mb-3">
                 <div className="flex items-center">
                   <BookOpen className="w-4 h-4 mr-1" />
-                  {formData.teachingExperience} years experience
+                  {formData.yearOfExperience} years experience
                 </div>
                 <div className="flex items-center">
                   <Users className="w-4 h-4 mr-1" />
-                  {formData.totalEnrollments} students
+                  {formData?.totalEnrollments} students
                 </div>
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-1" />
-                  {formData.country}
+                  {address.country}
                 </div>
               </div>
 
               {/* Teacher Rating */}
               <div className="flex items-center space-x-2 mb-4">
                 <div className="flex items-center">
-                  {renderStars(formData.teacherRating)}
-                  <span className="ml-2 text-sm font-medium">{formData.teacherRating}</span>
+                  {renderStars(formData?.teacherRating ?? 0)}
+                  <span className="ml-2 text-sm font-medium">{formData?.teacherRating ?? 0}</span>
                 </div>
               </div>
 
               {/* Subjects of Expertise */}
               <div className="flex flex-wrap gap-2">
-                {formData.specializations.slice(0, 5).map((subject, index) => (
+                {formData?.specializations?.slice(0, 5).map((subject, index) => (
                   <Badge key={index} variant="outline">{subject}</Badge>
                 ))}
               </div>
@@ -322,7 +352,7 @@ const TeacherProfilePage = () => {
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="personal">Personal</TabsTrigger>
           <TabsTrigger value="professional">Professional</TabsTrigger>
-          <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
+          <TabsTrigger value="documents">Documents</TabsTrigger>
         </TabsList>
 
         {/* Personal Information Tab */}
@@ -331,6 +361,7 @@ const TeacherProfilePage = () => {
             formData={formData}
             handleInputChange={handleInputChange}
             isEditing={isEditing}
+            handleSelectChange={handleSelectChange}
           />
           <AddressCard />
         </TabsContent>
@@ -342,11 +373,12 @@ const TeacherProfilePage = () => {
             handleInputChange={handleInputChange}
             isEditing={isEditing}
             handleMultiSelectChange={handleMultiSelectChange}
+            handleSelectChange={handleSelectChange}
           />
         </TabsContent>
 
         {/* Portfolio Tab */}
-        <TabsContent value="portfolio" className="space-y-6">
+        <TabsContent value="documents" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle>Portfolio & Credentials</CardTitle>
@@ -417,9 +449,9 @@ const TeacherProfilePage = () => {
                 </div>
 
                 {/* Display Uploaded Certificates */}
-                {formData.certifications.length > 0 && (
+                {formData?.certifications?.length > 0 && (
                   <div className="mt-4 space-y-3">
-                    <Label className="text-sm font-medium">Uploaded Certifications ({formData.certifications.length})</Label>
+                    <Label className="text-sm font-medium">Uploaded Certifications ({formData?.certifications?.length})</Label>
                     {formData.certifications.map((cert) => (
                       <div key={cert.id} className="border rounded-lg p-3 bg-gray-50">
                         <div className="flex items-center justify-between">
@@ -458,20 +490,6 @@ const TeacherProfilePage = () => {
                     ))}
                   </div>
                 )}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
-                <div>
-                  <Label htmlFor="portfolioWebsite">Portfolio Website</Label>
-                  <Input
-                    id="portfolioWebsite"
-                    value={formData.portfolioWebsite}
-                    onChange={(e) => handleInputChange('portfolioWebsite', e.target.value)}
-                    className="mt-1"
-                    placeholder="Personal website or GitHub"
-                  />
-                </div>
               </div>
             </CardContent>
           </Card>

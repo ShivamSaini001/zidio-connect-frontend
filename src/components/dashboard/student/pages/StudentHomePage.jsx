@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Star, BookOpen, Code, Palette, Briefcase, Camera, Music } from 'lucide-react';
-import CourcesSection from './CourcesSection';
-import JobsSection from './JobsSection';
-import InternshipsSection from './InternshipsSection';
-import HackathonsSection from './HackathonsSection';
-import HeroSection from './HeroSection';
-import CategoriesSection from './CategoriesSection';
-import FooterSection from './FooterSection';
-import TestimonialSection from './TestimonialSection';
-import InstructorSection from './InstructorSection';
+import CourcesSection from './home/CourcesSection';
+import JobsSection from './home/JobsSection';
+import InternshipsSection from './home/InternshipsSection';
+import HackathonsSection from './home/HackathonsSection';
+import HeroSection from './home/HeroSection';
+import CategoriesSection from './home/CategoriesSection';
+import TestimonialSection from './home/TestimonialSection';
+import InstructorSection from './home/InstructorSection';
+import { userNotLoggedIn } from '@/utils/Helper';
 
 
 const StudentHomePage = () => {
+
+    useEffect(() => {
+        userNotLoggedIn();
+    }, [])
+
     const categories = [
         { icon: Code, name: "Development", courses: 1250, color: "bg-blue-500" },
         { icon: Palette, name: "Design", courses: 890, color: "bg-purple-500" },

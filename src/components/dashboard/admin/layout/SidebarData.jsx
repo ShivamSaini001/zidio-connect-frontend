@@ -2,7 +2,6 @@ import {
     IconBarrierBlock,
     IconBrowserCheck,
     IconBug,
-    IconChecklist,
     IconError404,
     IconGraph,
     IconHelp,
@@ -12,17 +11,15 @@ import {
     IconLogout,
     IconMessages,
     IconNotification,
-    IconPackages,
     IconPalette,
     IconServerOff,
     IconSettings,
     IconTool,
-    IconUser,
     IconUserCog,
     IconUserOff,
     IconUsers,
 } from '@tabler/icons-react'
-import { BedSingle, Briefcase, GraduationCap } from 'lucide-react'
+import { Briefcase, GraduationCap } from 'lucide-react'
 
 export const sidebarData = {
     user: {
@@ -159,11 +156,6 @@ export const sidebarData = {
                     title: 'Help Center',
                     url: '/help-center',
                     icon: IconHelp,
-                },
-                {
-                    title: 'Logout',
-                    url: '/',
-                    icon: IconLogout,
                 },
             ],
         },
