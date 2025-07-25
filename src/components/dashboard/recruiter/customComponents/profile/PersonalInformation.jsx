@@ -8,7 +8,7 @@ import { Phone } from '@mui/icons-material'
 import { Edit, User } from 'lucide-react'
 import React from 'react'
 
-const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) => {
+const PersonalInformation = ({ formData, handleFormDataChange, recruiterDesignations }) => {
     return (
         <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden">
             <CardHeader>
@@ -32,7 +32,7 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                             value={formData.bio}
                             onChange={(e) => {
                                 if (e.target.value.length <= 500) {
-                                    setFormData({ ...formData, bio: e.target.value })
+                                    handleFormDataChange("bio", e.target.value);
                                 }
                             }}
                             name="bio"
@@ -53,6 +53,8 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                                     type='text'
                                     id="firstName"
                                     name="firstName"
+                                    value={formData.firstName}
+                                    onChange={(e) => handleFormDataChange("firstName", e.target.value)}
                                     className='pl-9'
                                     placeholder='First name'
                                 />
@@ -67,6 +69,8 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                                     type='text'
                                     id="lastName"
                                     name="lastName"
+                                    value={formData.lastName}
+                                    onChange={(e) => handleFormDataChange("lastName", e.target.value)}
                                     className='pl-9'
                                     placeholder='Last name'
                                 />
@@ -83,6 +87,8 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                                 type='number'
                                 id="mobileNumber"
                                 name="mobile"
+                                value={formData.mobile}
+                                onChange={(e) => handleFormDataChange("mobile", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter your mobile number'
                             />
@@ -99,6 +105,8 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                                 type='date'
                                 id='dateOfBirth'
                                 name='dateOfBirth'
+                                value={formData.dateOfBirth}
+                                onChange={(e) => handleFormDataChange("dateOfBirth", e.target.value)}
                                 placeholder='Enter your date of birth'
                                 className='w-auto'
                             />
@@ -108,7 +116,12 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                         {/* Gender */}
                         <div className='space-y-2'>
                             <Label htmlFor='gender'>Gender <span className='text-red-500'>*</span> </Label>
-                            <Select id='gender' name='gender'>
+                            <Select
+                                id='gender'
+                                name='gender'
+                                value={formData.gender}
+                                onValueChange={(value) => handleFormDataChange("gender", value)}
+                            >
                                 <SelectTrigger className="w-[163px]">
                                     <SelectValue placeholder="Select Gender" />
                                 </SelectTrigger>
@@ -126,7 +139,12 @@ const PersonalInformation = ({ formData, setFormData, recruiterDesignations }) =
                         {/* designation */}
                         <div className='space-y-2'>
                             <Label htmlFor='designation'>Designation <span className='text-red-500'>*</span> </Label>
-                            <Select id='designation' name='designation'>
+                            <Select
+                                id='designation'
+                                name='designation'
+                                value={formData.designation}
+                                onValueChange={(value) => handleFormDataChange("designation", value)}
+                            >
                                 <SelectTrigger className="w-[163px]">
                                     <SelectValue placeholder="Select Desigination" />
                                 </SelectTrigger>

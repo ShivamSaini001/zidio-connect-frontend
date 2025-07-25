@@ -43,6 +43,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
+    "jodit-react": "^5.2.19",
     "lucide-react": "^0.510.0",
     "motion": "^12.11.3",
     "react": "^18.2.0",

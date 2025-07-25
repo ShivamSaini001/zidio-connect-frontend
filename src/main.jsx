@@ -40,10 +40,10 @@ import TeacherProfilePage from './components/dashboard/teacher/pages/TeacherProf
 import TeacherDashboard from './components/dashboard/teacher/pages/TeacherDashboard';
 import TeacherApp from './components/dashboard/teacher/TeacherApp';
 import AdminProfile from './components/dashboard/admin/customComponents/AdminProfile';
-import HeroSection from './components/pages/HeroSection';
 import HomePage from './components/pages/HomePage';
 import { ToastContainer } from 'react-toastify';
-import Logout from './components/dashboard/common-components/LogoutButton';
+import CreateNewJobForm from './components/dashboard/recruiter/customComponents/forms/CreateNewJobForm';
+import CreateHackathoneForm from './components/dashboard/recruiter/customComponents/forms/CreateHackathoneForm';
 
 const router = createBrowserRouter([
   {
@@ -133,6 +133,22 @@ const router = createBrowserRouter([
       {
         path: "/recruiter/profile",
         element: <RecruiterProfile />,
+      },
+      {
+        path: "/recruiter/job/create",
+        element: <CreateNewJobForm />,
+      },
+      {
+        path: "/recruiter/job/all",
+        element: <RecruiterProfile />,
+      },
+      {
+        path: "/recruiter/job/update",
+        element: <RecruiterProfile />,
+      },
+      {
+        path: "/recruiter/hackathone/create",
+        element: <CreateHackathoneForm />,
       },
     ]
   },

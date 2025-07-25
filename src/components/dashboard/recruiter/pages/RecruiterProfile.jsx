@@ -13,7 +13,6 @@ import CompanyInformation from '../customComponents/profile/CompanyInformation';
 const RecruiterProfile = () => {
     const [formData, setFormData] = useState({
         fullName: 'Shivam saini',
-        companyName: 'TechCorp Solutions',
         designation: 'Senior Technical Recruiter',
         workEmail: 'sarah.johnson@techcorp.com',
         phoneNumber: '+1 (555) 123-4567',
@@ -24,6 +23,28 @@ const RecruiterProfile = () => {
         totalJobsPosted: 42,
         totalInternshipsPosted: 15
     });
+
+    const [companyDetails, setCompanyDetails] = useState({
+        companyName: 'TechCorp Solutions',
+        companyDescription: '',
+        headquartersLocation: '',
+        industry: '',
+        companySize: '',
+        companyType: '',
+        yearFounded: '',
+        companyWebsiteUrl: '',
+        companyLinkedinUrl: '',
+        mobile: '',
+        companyEmail: '',
+        companyLogo: '',
+    })
+
+    const [addressDetails, setAddressDetails] = useState({
+        state: '',
+        city: '',
+        country: '',
+        zipCode: '',
+    })
 
     const [profileImage, setProfileImage] = useState('');
 
@@ -61,6 +82,19 @@ const RecruiterProfile = () => {
             { label: "Chief Human Resources Officer (CHRO)", value: "chro" }
         ]
     };
+
+    const handleCompanyDetailsChange = (name, value) => {
+        setCompanyDetails(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleFormDataChange = (name, value) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleAddressDetailsChange = (name, value) => {
+        setAddressDetails(prev => ({ ...prev, [name]: value }));
+    };
+
 
     const handleImageUpload = (type) => {
         const input = document.createElement('input');
@@ -131,13 +165,23 @@ const RecruiterProfile = () => {
                     </Card>
 
                     {/* Personal Information card */}
-                    <PersonalInformation formData={formData} setFormData={setFormData} recruiterDesignations={recruiterDesignations} />
+                    <PersonalInformation
+                        formData={formData}
+                        handleFormDataChange={handleFormDataChange}
+                        recruiterDesignations={recruiterDesignations}
+                    />
 
                     {/* Address card */}
-                    <AddressCard />
+                    <AddressCard
+                        addressDetails={addressDetails}
+                        handleAddressDetailsChange={handleAddressDetailsChange}
+                    />
 
                     {/* Company Information card */}
-                    <CompanyInformation formData={formData} setFormData={setFormData} recruiterDesignations={recruiterDesignations}/>
+                    <CompanyInformation
+                        companyDetails={companyDetails}
+                        handleCompanyDetailsChange={handleCompanyDetailsChange}
+                    />
                 </section>
             </div >
         </div >

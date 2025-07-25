@@ -1,5 +1,6 @@
 import {
     IconBrowserCheck,
+    IconCalendarEvent,
     IconGraph,
     IconHelp,
     IconLayoutDashboard,
@@ -34,21 +35,42 @@ export const sidebarData = {
                     icon: ArrowDownSquare,
                 },
                 {
-                    title: 'Jobs',
-                    url: '/recruiter',
-                    icon: Briefcase,
-                },
-                {
-                    title: 'Internships',
-                    url: '/recruiter',
-                    icon: GraduationCap,
-                },
-                {
                     title: 'Company Profile',
                     url: '/recruiter',
                     icon: IconGraph,
                 },
-
+                {
+                    title: 'Job/Internships',
+                    icon: Briefcase,
+                    items: [
+                        {
+                            title: 'View All',
+                            url: '#',
+                            icon: IconUserCog,
+                        },
+                        {
+                            title: 'Create New',
+                            url: '/recruiter/job/create',
+                            icon: IconSettings,
+                        },
+                    ]
+                },
+                {
+                    title: 'Hackathone Management',
+                    icon: IconCalendarEvent,
+                    items: [
+                        {
+                            title: 'All Hackathones',
+                            url: '#',
+                            icon: IconUserCog,
+                        },
+                        {
+                            title: 'Create New Hackathone',
+                            url: '/recruiter/hackathone/create',
+                            icon: IconSettings,
+                        },
+                    ]
+                },
             ],
         },
         {

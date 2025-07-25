@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     User,
-    Settings,
-    CheckCircle,
-    Moon,
-    Sun,
     File,
     GraduationCap,
+    EditIcon,
+    X,
+    Save,
 } from 'lucide-react';
 import ProfileSection from '../custom-components/profile/ProfileImage';
 import PersonalInformation from '../custom-components/profile/PersonalInformation';
@@ -15,76 +14,187 @@ import AddressCard from '../../common-components/AddressCard';
 import SkillsCard from '../custom-components/cards/SkillsCard';
 import EducationCard from '../custom-components/cards/EducationCard';
 import ResumeSection from '../custom-components/profile/ResumeSection';
-import { userNotLoggedIn } from '@/utils/Helper';
+import { Button } from '@/components/ui/button';
+import {
+    addUserEducatoin,
+    addUserSkill,
+    getStudentProfile,
+    removeUserEducation,
+    removeUserSkill,
+    updateStudentProfile,
+    updateUserEducation
+} from '@/services/UserProfileService';
 
 // Mock data
 const initialProfile = {
-    name: 'Alex Johnson',
-    title: 'Computer Science Student',
-    email: 'alex.johnson@email.com',
-    phone: '+1 (555) 123-4567',
-    location: 'San Francisco, CA',
-    joinDate: '2023',
+    firstName: 'Alex',
+    lastName: 'Johnson',
+    tagline: 'Web Developer || Java Developer',
     bio: 'Passionate computer science student with a focus on web development and machine learning. Always eager to learn new technologies and work on innovative projects. Currently pursuing my Bachelor\'s degree with a GPA of 3.8.',
-    stats: {
-        courses: 24,
-        certificates: 8
+    mobile: '7302848668',
+    gender: 'male',
+    dateOfBirth: '',
+    resumeUrl: '',
+    linkedInUrl: '',
+    githubUrl: '',
+    profileImageUrl: '',
+    skills: [
+        {
+            id: '1',
+            name: 'Java',
+        },
+    ],
+    education: [
+        {
+            id: '1',
+            collegeName: 'Krishna Institute Of Education & Management',
+            courceName: 'Bechelor Of Computer Applications (BCA)',
+            universityName: 'CCS University',
+            branch: 'Computer Science',
+            startingYear: '2020',
+            passingYear: '2023',
+            resultType: 'percentage', // percentage, CGPA
+            result: '80.5',
+        },
+        {
+            id: '2',
+            collegeName: 'Gocher Krishi Inter College',
+            courceName: 'BA',
+            universityName: 'CCS University',
+            branch: 'IT',
+            startingYear: '2018',
+            passingYear: '2022',
+            resultType: 'CGPA', // percentage, CGPA
+            result: '90.5',
+        },
+        {
+            id: '3',
+            collegeName: 'Krishna Institute Of Education & Management',
+            courceName: 'MCA',
+            universityName: 'CCS University',
+            branch: 'Computer Science',
+            startingYear: '2023',
+            passingYear: '2025',
+            resultType: 'percentage', // percentage, CGPA
+            result: '85.5',
+        },
+    ],
+    address: {
+        city: 'Saharanpur',
+        state: 'Uttar Pradesh',
+        country: 'India',
+        zipCode: '247451',
     },
-    socialLinks: {
-        github: 'github.com/alexjohnson',
-        linkedin: 'linkedin.com/in/alexjohnson',
-        portfolio: 'alexjohnson.dev'
-    }
+    userDto: {
+        email: 'shivamsaini3209@gmail.com',
+        createdAt: '2025-07-22',
+        updatedAt: '2025-07-02',
+        enabled: true,
+    },
 };
 
 const StudentProfilePage = () => {
 
-    useEffect( () => {
-        userNotLoggedIn();
-    }, [])
-
     const [activeTab, setActiveTab] = useState('profile');
-    const [profile, setProfile] = useState(initialProfile);
-    const [darkMode, setDarkMode] = useState(false);
-    const [errors, setErrors] = useState({});
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
+    const [formData, setFormData] = useState({});
+    const [formDataErrors, setformDataErrors] = useState({});
+    const [isEditing, setIsEditing] = useState(false);
+
+    const [backupProfile, setBackupProfile] = useState(null);
 
     const tabs = [
         { id: 'profile', label: 'Profile', icon: User },
-        { id: 'education', label: 'Education', icon: GraduationCap },
+        { id: 'education', label: 'Education & Skills', icon: GraduationCap },
         { id: 'resume', label: 'Resume', icon: File },
     ];
 
-    // Validation function
-    const validateProfile = () => {
-        const newErrors = {};
-
-        if (!profile.name.trim()) {
-            newErrors.name = 'Name is required';
+    useEffect(() => {
+        async function fetchData() {
+            setFormData(await getStudentProfile());
         }
+        fetchData();
+    }, [])
 
-        if (!profile.phone.trim()) {
-            newErrors.phone = 'Phone number is required';
-        } else if (!/^\+?\d{10,15}$/.test(profile.phone.replace(/[\s\-\(\)]/g, ''))) {
-            newErrors.phone = 'Invalid phone number format';
-        }
-
-        if (!profile.location.trim()) {
-            newErrors.location = 'Location is required';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    console.log(formData)
 
     // Handle input changes
-    const handleInputChange = (field, value) => {
-        setProfile(prev => ({ ...prev, [field]: value }));
-        if (errors[field]) {
-            setErrors(prev => ({ ...prev, [field]: '' }));
+    const handleFormDataChange = (field, value) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        // Clear error message.
+        if (formDataErrors[field]) {
+            setformDataErrors(prev => ({ ...prev, [field]: '' }));
         }
     };
+
+    // Handle address changes
+    const handleAddressChange = (field, value) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            address: {
+                ...prevData.address,
+                [field]: value,
+            },
+        }));
+        // Clear error message.
+        if (formDataErrors.address && formDataErrors.address[field]) {
+            setformDataErrors(prev => ({
+                ...prev,
+                address: {
+                    ...prev.address,
+                    [field]: '',
+                }
+            }));
+        }
+    };
+
+    // Handle education changes
+    const handleSaveEducationChange = async (educationData) => {
+        const updatedEducation = await addUserEducatoin(educationData)
+        setFormData((prevData) => ({
+            ...prevData,
+            education: updatedEducation,
+        }));
+    };
+
+    const handleDeleteEducationChange = async (educationData) => {
+        const updatedEducation = await removeUserEducation(educationData);
+        setFormData((prevData) => ({
+            ...prevData,
+            education: updatedEducation,
+        }));
+    };
+
+    const handleUpdateEducationChange = async (educationData) => {
+        const updatedEducation = await updateUserEducation(educationData);
+        setFormData((prevData) => ({
+            ...prevData,
+            education: updatedEducation,
+        }));
+    };
+
+    // Handle skills add
+    const addNewSkill = async (newSkill) => {
+        const updatedSkills = await addUserSkill(newSkill);
+        setFormData(prev => ({
+            ...prev,
+            skills: updatedSkills,
+        }));
+    };
+
+    // Handle skills remove
+    const removeSkill = async (skill) => {
+        const UpdatedSkills = await removeUserSkill(skill);
+        setFormData(prev => ({
+            ...prev,
+            skills: UpdatedSkills,
+        }));
+    };
+
+    // Update Student profile 
+    const handleSaveProfile = async () => {
+        setIsEditing(false);
+        setFormData(await updateStudentProfile(formData));
+    }
 
     const tabVariants = {
         hidden: { opacity: 0, y: 20 },
@@ -141,30 +251,109 @@ const StudentProfilePage = () => {
                             animate="visible"
                             exit="exit"
                             transition={{ duration: 0.3 }}
+                            className='flex flex-col gap-2'
                         >
-                            <div className="flex flex-col lg:flex-row gap-8">
+                            {/* Edit profile buttons */}
+                            <div className='flex gap-3 ms-auto'>
+                                {
+                                    !isEditing ?
+                                        <Button
+                                            className={'cursor-pointer'}
+                                            onClick={() => {
+                                                setIsEditing(!isEditing)
+                                                setBackupProfile(formData);
+                                            }}
+                                        >
+                                            <EditIcon />
+                                            Edit profile
+                                        </Button>
+                                        :
+                                        <div className='flex gap-3'>
+                                            {/* Cancel button */}
+                                            <Button
+                                                className={'cursor-pointer hover:bg-red-700'}
+                                                variant={'destructive'}
+                                                onClick={() => {
+                                                    setIsEditing(!isEditing)
+                                                    setFormData(backupProfile);
+                                                }}
+                                            >
+                                                <X />
+                                                Cancel
+                                            </Button>
+                                            {/* Save Button */}
+                                            <Button
+                                                className={'cursor-pointer bg-green-700 text-white hover:bg-green-800'}
+                                                variant={'default'}
+                                                onClick={handleSaveProfile}
+                                            >
+                                                <Save />
+                                                Save
+                                            </Button>
+                                        </div>
+                                }
+                            </div>
+
+                            <div className="flex flex-col md:flex-row gap-8 w-full">
                                 {/* Enhanced Profile Sidebar */}
-                                <div className={''}>
-                                    <ProfileSection profile={profile} />
+                                <div className={'min-w-sm'}>
+                                    <ProfileSection formData={formData} />
                                 </div>
 
                                 {/* Enhanced Main Content */}
-                                <div className={'gap-5 grid grid-cols-1'}>
+                                <div className={'gap-5 grid grid-cols-1 w-full'}>
                                     <PersonalInformation
-                                        profile={profile}
-                                        setProfile={setProfile}
-                                        setShowToast={setShowToast}
-                                        setToastMessage={setToastMessage}
-                                        handleInputChange={handleInputChange}
-                                        errors={errors}
-                                        setErrors={setErrors}
+                                        formData={formData}
+                                        handleFormDataChange={handleFormDataChange}
+                                        formDataErrors={formDataErrors}
+                                        isEditing={isEditing}
                                     />
 
-                                    <AddressCard />
-
-                                    <SkillsCard />
+                                    <AddressCard
+                                        formData={formData}
+                                        handleAddressChange={handleAddressChange}
+                                        formDataErrors={formDataErrors}
+                                        isEditing={isEditing}
+                                    />
                                 </div>
                             </div>
+                        </motion.div>
+                    )}
+
+                    {/* Education Tab */}
+                    {activeTab === 'education' && (
+                        <motion.div
+                            key="education"
+                            variants={tabVariants}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            transition={{ duration: 0.3 }}
+                            className='flex flex-col gap-6'
+                        >
+                            <div className="text-center">
+                                <h1 className="text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
+                                    <GraduationCap className="text-blue-600" size={40} />
+                                    Educations & Skills
+                                </h1>
+                                <p className="text-gray-600">Academic achievements and qualifications</p>
+                            </div>
+                            <SkillsCard
+                                formData={formData}
+                                addNewSkill={addNewSkill}
+                                removeSkill={removeSkill}
+                                formDataErrors={formDataErrors}
+                                setformDataErrors={setformDataErrors}
+                            />
+
+                            <EducationCard
+                                formData={formData}
+                                handleSaveEducationChange={handleSaveEducationChange}
+                                handleDeleteEducationChange={handleDeleteEducationChange}
+                                handleUpdateEducationChange={handleUpdateEducationChange}
+                                formDataErrors={formDataErrors}
+                            />
+
                         </motion.div>
                     )}
 
@@ -182,41 +371,6 @@ const StudentProfilePage = () => {
                         </motion.div>)
                     }
 
-                    {/* Education Tab */}
-                    {activeTab === 'education' && (
-                        <motion.div
-                            key="education"
-                            variants={tabVariants}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            transition={{ duration: 0.3 }}
-                        >
-                            <EducationCard />
-
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-
-                {/* Enhanced Toast Notification */}
-                <AnimatePresence>
-                    {showToast && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 100, scale: 0.8 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: 100, scale: 0.8 }}
-                            className="fixed bottom-4 md:bottom-8 right-4 md:right-8 bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 py-4 md:px-8 md:py-6 rounded-2xl md:rounded-3xl shadow-2xl flex items-center gap-3 md:gap-4 z-50 border border-green-400/20"
-                        >
-                            <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-xl md:rounded-2xl flex items-center justify-center">
-                                <CheckCircle className="w-5 h-5 md:w-6 md:h-6" />
-                            </div>
-                            <div>
-                                <p className="font-semibold text-base md:text-lg">Success!</p>
-                                <p className="text-sm md:text-base text-green-100">{toastMessage}</p>
-                            </div>
-                        </motion.div>
-                    )}
                 </AnimatePresence>
             </div>
         </div>

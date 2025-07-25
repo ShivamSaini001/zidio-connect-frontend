@@ -9,8 +9,12 @@ import { IconBuilding } from '@tabler/icons-react'
 import { Building, Building2, Edit, ImageIcon, Link, Linkedin, MailIcon, MapPin, Upload, User, X } from 'lucide-react'
 import React, { useState } from 'react'
 
-const CompanyInformation = ({ }) => {
-
+const CompanyInformation = ({ className, handleCompanyDetailsChange, companyDetails }) => {
+    
+    // let values = Object.values(companyDetails);
+    // Object.keys(companyDetails).forEach((key, index) => {
+    //     console.log(key, " : ", values[index]);
+    // })
     const [logoPreview, setLogoPreview] = useState(null);
 
     const industries = [
@@ -48,7 +52,7 @@ const CompanyInformation = ({ }) => {
     ]
 
     return (
-        <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden">
+        <Card className={"bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 overflow-hidden" + "  " + className}>
             <CardHeader>
                 <div className='flex justify-between'>
                     <p className='scroll-m-20 text-3xl font-semibold tracking-tight'>Company Information</p>
@@ -69,6 +73,8 @@ const CompanyInformation = ({ }) => {
                                 type='text'
                                 id="companyName"
                                 name="companyName"
+                                value={companyDetails.companyName}
+                                onChange={(e) => handleCompanyDetailsChange("companyName", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter Company name'
                             />
@@ -82,14 +88,13 @@ const CompanyInformation = ({ }) => {
                         <Textarea
                             type='text'
                             id="companyDescription"
-                            onChange={(e) => {
-
-                            }}
                             name="companyDescription"
+                            value={companyDetails.companyDescription}
+                            onChange={(e) => handleCompanyDetailsChange("companyDescription", e.target.value)}
                             placeholder='Enter Company Description'
                         />
                         <p className='text-sm text-gray-500'>
-                            <span>127</span>/
+                            <span>{companyDetails.companyDescription.length}</span>/
                             500 Characters
                         </p>
                     </div>
@@ -102,6 +107,8 @@ const CompanyInformation = ({ }) => {
                                 type='text'
                                 id="headquartersLocation"
                                 name="headquartersLocation"
+                                value={companyDetails.headquartersLocation}
+                                onChange={(e) => handleCompanyDetailsChange("headquartersLocation", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter Headquarters Location'
                             />
@@ -113,7 +120,12 @@ const CompanyInformation = ({ }) => {
                         {/* Industry */}
                         <div className='space-y-2'>
                             <Label htmlFor='industry'>Industry <span className='text-red-500'>*</span> </Label>
-                            <Select id='industry' name='industry'>
+                            <Select
+                                id='industry'
+                                name='industry'
+                                value={companyDetails.industry}
+                                onValueChange={(value) => handleCompanyDetailsChange("industry", value)}
+                            >
                                 <SelectTrigger className="w-[163px]">
                                     <SelectValue placeholder="Select Industry" />
                                 </SelectTrigger>
@@ -133,7 +145,12 @@ const CompanyInformation = ({ }) => {
                         {/* Company Size */}
                         <div className='space-y-2'>
                             <Label htmlFor='companySize'>Company Size <span className='text-red-500'>*</span> </Label>
-                            <Select id='companySize' name='companySize'>
+                            <Select
+                                id='companySize'
+                                name='companySize'
+                                value={companyDetails.companySize}
+                                onValueChange={(value) => handleCompanyDetailsChange("companySize", value)}
+                            >
                                 <SelectTrigger className="w-[163px]">
                                     <SelectValue placeholder="Select Company Size" />
                                 </SelectTrigger>
@@ -153,7 +170,12 @@ const CompanyInformation = ({ }) => {
                         {/* Company Type */}
                         <div className='space-y-2'>
                             <Label htmlFor='companyType'>Company Type <span className='text-red-500'>*</span> </Label>
-                            <Select id='companyType' name='companyType'>
+                            <Select
+                                id='companyType'
+                                name='companyType'
+                                value={companyDetails.companyType}
+                                onValueChange={(value) => handleCompanyDetailsChange("companyType", value)}
+                            >
                                 <SelectTrigger className="w-[163px]">
                                     <SelectValue placeholder="Select Company Type" />
                                 </SelectTrigger>
@@ -174,7 +196,12 @@ const CompanyInformation = ({ }) => {
                         <div className='space-y-2'>
                             <Label htmlFor='yearFounded'>Year Founded <span className='text-red-500'>*</span> </Label>
                             <div className='relative'>
-                                <Select id='yearFounded' name='yearFounded'>
+                                <Select
+                                    id='yearFounded'
+                                    name='yearFounded'
+                                    value={companyDetails.yearFounded}
+                                    onValueChange={(value) => handleCompanyDetailsChange("yearFounded", value)}
+                                >
                                     <SelectTrigger className="w-[163px]">
                                         <SelectValue placeholder="Select Year Founded" />
                                     </SelectTrigger>
@@ -204,6 +231,8 @@ const CompanyInformation = ({ }) => {
                                 type='url'
                                 id="companyWebsiteUrl"
                                 name="companyWebsiteUrl"
+                                value={companyDetails.companyWebsiteUrl}
+                                onChange={(e) => handleCompanyDetailsChange("companyWebsiteUrl", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter Company Website Url'
                             />
@@ -219,6 +248,8 @@ const CompanyInformation = ({ }) => {
                                 type='Url'
                                 id="companyLinkedinUrl"
                                 name="companyLinkedinUrl"
+                                value={companyDetails.companyLinkedinUrl}
+                                onChange={(e) => handleCompanyDetailsChange("companyLinkedinUrl", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter Company Linkedin Url'
                             />
@@ -234,6 +265,8 @@ const CompanyInformation = ({ }) => {
                                 type='number'
                                 id="mobileNumber"
                                 name="mobile"
+                                value={companyDetails.mobile}
+                                onChange={(e) => handleCompanyDetailsChange("mobile", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter Company mobile'
                             />
@@ -249,6 +282,8 @@ const CompanyInformation = ({ }) => {
                                 type='email'
                                 id="companyEmail"
                                 name="companyEmail"
+                                value={companyDetails.companyEmail}
+                                onChange={(e) => handleCompanyDetailsChange("companyEmail", e.target.value)}
                                 className='pl-9'
                                 placeholder='Enter Company Email'
                             />

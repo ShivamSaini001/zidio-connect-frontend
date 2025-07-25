@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import { MapPin, User, Camera } from 'lucide-react';
 import { Mail, Phone } from '@mui/icons-material';
+import { capatalizeString } from '@/utils/Helper';
 
-const ProfileImage = ({ profile, className }) => {
+const ProfileImage = ({ formData, className }) => {
     const [profileImage, setProfileImage] = useState(null);
 
     // Handle profile image upload
@@ -55,52 +56,55 @@ const ProfileImage = ({ profile, className }) => {
                     </div>
 
                     <h2 className={'text-xl md:text-2xl font-bold mt-4 md:mt-6 mb-1 md:mb-2 dark:text-white text-gray-900'}>
-                        {profile.name}
+                        {(formData?.firstName || '') + ' ' + (formData?.lastName || '')}
                     </h2>
                     <p className={'text-base md:text-lg font-medium mb-1 dark:text-purple-400 text-blue-600'}>
-                        {profile.title}
+                        {formData?.tagline || ''}
                     </p>
                     <p className={'text-xs md:text-sm dark:text-gray-400 text-gray-600'}>
-                        Member since {profile.joinDate}
+                        Member since {formData?.userDto?.createdAt || ''}
                     </p>
                 </div>
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
-                    {Object.entries(profile.stats).map(([key, value]) => (
-                        <div key={key} className={'text-center p-4 rounded-2xl'
-                            + ' dark:bg-gray-700/50 dark:border dark:border-gray-600/30'
-                            + ' bg-gray-100 border border-gray-200/50'}>
-                            <div className={'text-2xl font-bold dark:text-white text-gray-900'}>
-                                {value}
-                            </div>
-                            <div className={'text-xs capitalize dark:text-gray-400 text-gray-600'}>
-                                {key}
-                            </div>
-                        </div>
-                    ))}
+                    {formData?.address && Object.entries(formData?.address).map(([key, value]) => {
+                        if (key !== 'addressId') {
+                            return (<div
+                                key={key}
+                                className={'text-center p-4 space-y-1 rounded-2xl dark:bg-gray-700/50 dark:border dark:border-gray-600/30 bg-gray-100 border border-gray-200/50'}>
+                                <div className={'text-xl font-bold dark:text-white text-gray-900'}>
+                                    {capatalizeString(key)}
+                                </div>
+                                <div className={'text-md capitalize dark:text-gray-400 text-gray-600'}>
+                                    {capatalizeString(value)}
+                                </div>
+                            </div>)
+                        }
+                    })}
                 </div>
 
                 {/* Contact Info */}
                 <div className="space-y-3 md:space-y-4">
-                    <div className={'flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl md:rounded-2xl'
-                        + ' dark:bg-gray-700/30 dark:text-gray-300'
-                        + ' bg-gray-100 text-gray-700'
-                    }>
+                    <div className={'flex items-center gap-3 md:gap-4 p-3 md:p-4 rounded-xl md:rounded-2xl dark:bg-gray-700/30 dark:text-gray-300 bg-gray-100 text-gray-700'}>
                         <Mail className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
-                        <span className="text-xs md:text-sm font-medium truncate">{profile.email}</span>
+                        <span className="text-xs md:text-sm font-medium truncate">
+                            {formData?.userDto?.email || ''}
+                        </span>
                     </div>
                     <div className={'flex items-center gap-4 p-4 rounded-2xl'
                         + ' dark:bg-gray-700/30 dark:text-gray-300'
                         + ' bg-gray-100 text-gray-700'}>
                         <Phone className="w-5 h-5 text-green-500" />
-                        <span className="text-sm font-medium">{profile.phone}</span>
+                        <span className="text-sm font-medium">{formData?.mobile || ''}</span>
                     </div>
                     <div className={'flex items-center gap-4 p-4 rounded-2xl'
                         + ' dark:bg-gray-700/30 dark:text-gray-300'
                         + ' bg-gray-100 text-gray-700'}>
                         <MapPin className="w-5 h-5 text-red-500" />
-                        <span className="text-sm font-medium">{profile.location}</span>
+                        <span className="text-sm font-medium">
+                            {formData?.address?.state || '' + ` (${formData?.address?.country || ''})`}
+                        </span>
                     </div>
                 </div>
             </div>
